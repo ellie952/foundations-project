@@ -1,4 +1,5 @@
 const express = require("express");
+const { logger } = require("./logger/logger.js");
 
 const server = express();
 
@@ -9,5 +10,5 @@ server.get("/", (req, res) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`Server listening at port ${PORT}.`);
+    logger.info(`Server listening at port ${PORT}.`);
 });
