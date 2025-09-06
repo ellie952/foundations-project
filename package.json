@@ -1,0 +1,16 @@
+{
+  "name": "foundations-project",
+  "version": "1.0.0",
+  "description": "This is your first individual project at Revature. You are tasked with creating a ticketing reimbursement system for a company. To have an idea of what is expected of you, watch the following below:",
+  "repository": {
+    "type": "git",
+    "url": "git@work:ellie952/foundations-project.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
