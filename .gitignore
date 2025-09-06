@@ -1,3 +1,8 @@
-node_modules/
+# Data tables
+data/
 
+# Log files
 server.log
+
+# Node modules
+node_modules/
