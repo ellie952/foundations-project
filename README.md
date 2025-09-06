@@ -29,11 +29,6 @@ This project will require you to use technologies that you may have not come acr
 - Understand what your application is meant to do
 - Review the diagrams
 
-![Activity Diagram](images/Activity-Diagram.png) 
-![State Chart Diagram](images/State-Chart-Diagram.png) 
-![Use Case Diagram](images/Use-Case-Diagram.png)
-
-
 ### Glossary of Terms
 
 #### Feature
