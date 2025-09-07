@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("./logger/logger.js");
-const users = require("./data/users.json");
+const users = require("./data/user.json");
 
 const server = express();
 
@@ -16,6 +16,7 @@ const HttpStatusCodes = {
 }
 
 server.get("/", (req, res) => {
+    logger.info("Users retrieved.");
     res.status(HttpStatusCodes.OK);
     res.json({
         message: "Users retrieved.",
