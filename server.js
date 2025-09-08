@@ -1,6 +1,7 @@
 const express = require("express");
 const { logger } = require("./logger/logger.js");
 const users = require("./data/user.json");
+const tickets = require("./data/ticket.json");
 
 const server = express();
 
@@ -15,7 +16,7 @@ const HttpStatusCodes = {
     INTERNAL_SERVER_ERROR: 500
 }
 
-server.get("/", (req, res) => {
+server.get("/users", (req, res) => {
     logger.info("Users retrieved.");
     res.status(HttpStatusCodes.OK);
     res.json({
@@ -23,6 +24,15 @@ server.get("/", (req, res) => {
         data: users
     });
 });
+
+server.get("/tickets", (req, res) => {
+    logger.info("Tickets retrieved.");
+    res.status(HttpStatusCodes.OK);
+    res.json({
+        message: "Tickets retrieved.",
+        data: tickets
+    })
+})
 
 server.listen(PORT, () => {
     logger.info(`Server listening at port ${PORT}.`);
