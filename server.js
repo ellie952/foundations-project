@@ -5,6 +5,8 @@ const tickets = require("./data/ticket.json");
 
 const server = express();
 
+server.use(express.json());
+
 const PORT = 3000;
 
 const HttpStatusCodes = {
@@ -23,6 +25,20 @@ server.get("/users", (req, res) => {
         message: "Users retrieved.",
         data: users
     });
+});
+
+server.post("/users", (req, res) => {
+    const newUser = req.body;
+
+    if (!newUser || !("username" in newUser) || !("password" in newUser) || !("role" in newUser)) {
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        logger.error("Error adding new user.");
+        res.json({ message: "Error adding new user." });
+    } else {
+        users.push(newUser);
+        logger.info("New user added.");
+        res.json({ message: "New user added." });
+    }
 });
 
 server.get("/tickets", (req, res) => {
