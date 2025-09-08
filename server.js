@@ -85,6 +85,7 @@ server.post("/users/login", (req, res) => {
     }
 });
 
+// Get all tickets
 server.get("/tickets", (req, res) => {
     logger.info("Tickets retrieved.");
     res.status(HttpStatusCodes.OK);
@@ -94,15 +95,16 @@ server.get("/tickets", (req, res) => {
     });
 })
 
+// Submit ticket
 server.post("/tickets", (req, res) => {
     const newTicket = req.body;
-    let duplicate = false;
 
     if (!newTicket || !("author" in newTicket) || !("description" in newTicket) || !("type" in newTicket) || !("amount" in newTicket)) {
         logger.error("New ticket must contain an author, description, type, and amount.");
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: "New ticket must contain an author, description, type, and amount." });
     } else {
+        newTicket.status = "Pending";
         newTicket.id = crypto.randomUUID();
         tickets.push(newTicket);
 
