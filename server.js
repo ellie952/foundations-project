@@ -27,7 +27,8 @@ server.get("/users", (req, res) => {
     });
 });
 
-server.post("/users", (req, res) => {
+// Register
+server.post("/users/register", (req, res) => {
     const newUser = req.body;
     let duplicate = false;
 
@@ -54,6 +55,19 @@ server.post("/users", (req, res) => {
             res.status(HttpStatusCodes.BAD_REQUEST);
             res.json({ message: "Username already taken." });
         }
+    }
+});
+
+// Login
+server.post("/users/login", (req, res) => {
+    const unauthorizedUser = req.body;
+
+    if (!unauthorizedUser || !("username" in unauthorizedUser) || !("password" in unauthorizedUser)) {
+        logger.error("To log in, you must enter a username and password.");
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: "To log in, you must enter a username and password." });
+    } else {
+        // if user exists and password is correct
     }
 });
 
