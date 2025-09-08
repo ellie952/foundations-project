@@ -1,6 +1,6 @@
 const express = require("express");
-const { logger } = require("../logger/logger.js")
-const tickets = require("../data/ticket.json");
+const { logger } = require("../logger/logger.js");
+const { fetchAllTickets, addNewTicket } = require("../service/ticketService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -19,26 +19,21 @@ ticketController.get("/", (req, res) => {
     res.status(HttpStatusCodes.OK);
     res.json({
         message: "Tickets retrieved.",
-        data: tickets
+        data: fetchAllTickets()
     });
 })
 
 // Submit ticket
 ticketController.post("/", (req, res) => {
-    const newTicket = req.body;
+    const newTicketDetails = req.body;
+    const newTicket = addNewTicket(newTicketDetails);
 
-    if (!newTicket || !("author" in newTicket) || !("description" in newTicket) || !("type" in newTicket) || !("amount" in newTicket)) {
-        logger.error("New ticket must contain an author, description, type, and amount.");
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "New ticket must contain an author, description, type, and amount." });
-    } else {
-        newTicket.status = "Pending";
-        newTicket.id = crypto.randomUUID();
-        tickets.push(newTicket);
-
-        logger.info("New ticket added.");
+    if (newTicket) {
         res.status(HttpStatusCodes.CREATED);
-        res.json({ message: "New ticket added." });
+        res.json({ message: "Ticket created successfully.", data: newTicket });
+    } else {
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: "Error registering new user." });
     }
 })
 

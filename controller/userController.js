@@ -29,7 +29,7 @@ userController.post("/register", (req, res) => {
     const registeredUser = addNewUser(newUser);
 
     if (registeredUser) {
-        res.status(HttpStatusCodes.OK);
+        res.status(HttpStatusCodes.CREATED);
         res.json({ message: "User registered successfully." });
     } else {
         res.status(HttpStatusCodes.BAD_REQUEST);
