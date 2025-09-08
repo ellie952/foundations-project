@@ -1,6 +1,6 @@
 const express = require("express");
-const { logger } = require("../logger/logger.js")
-const users = require("../data/user.json");
+const { logger } = require("../logger/logger.js");
+const { fetchAllUsers, addNewUser, validateLogin } = require("../service/userService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -19,64 +19,35 @@ userController.get("/", (req, res) => {
     res.status(HttpStatusCodes.OK);
     res.json({
         message: "Users retrieved.",
-        data: users
+        data: fetchAllUsers()
     });
 });
 
 // Register
 userController.post("/register", (req, res) => {
     const newUser = req.body;
-    let duplicate = false;
+    const registeredUser = addNewUser(newUser);
 
-    if (!newUser || !("username" in newUser) || !("password" in newUser)) {
-        logger.error("New user must contain a username and password.");
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "New user must contain a username and password." });
+    if (registeredUser) {
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: "User registered successfully." });
     } else {
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].username !== newUser.username) continue;
-            duplicate = true;
-        }
-
-        if (!duplicate) {
-            newUser.id = crypto.randomUUID();
-            newUser.role = "Employee";
-            users.push(newUser);
-
-            logger.info("New user added.");
-            res.status(HttpStatusCodes.CREATED);
-            res.json({ message: "New user added." });
-        } else {
-            logger.error("Username already taken.");
-            res.status(HttpStatusCodes.BAD_REQUEST);
-            res.json({ message: "Username already taken." });
-        }
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: "Error registering new user." });
     }
 });
 
 // Login
 userController.post("/login", (req, res) => {
-    const credentials = req.body;
-    let authorizedUser = null;
+    const { username, password } = req.body;
+    const loggedInUser = validateLogin(username, password);
 
-    if (!credentials || !("username" in credentials) || !("password" in credentials)) {
-        logger.error("Attempted login without username and password.");
-        return res.status(HttpStatusCodes.BAD_REQUEST)
-            .json({ message: "To log in, you must enter a username and password." });
-    } else {
-        for (let i = 0; i < users.length; i++) {
-            if ((users[i].username === credentials.username) && (users[i].password === credentials.password)) {
-                authorizedUser = users[i];
-            }
-        }
-    }
-
-    if (!authorizedUser) {
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "Invalid credentials." });
-    } else {
+    if (loggedInUser) {
         res.status(HttpStatusCodes.OK);
-        res.json({ message: "User authorized.", data: authorizedUser });
+        res.json({ message: "User successfully logged in.", data: loggedInUser });
+    } else {
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: "Error registering new user." });
     }
 });
 
