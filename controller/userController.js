@@ -55,6 +55,7 @@ userController.post("/register", (req, res) => {
 // Login
 userController.post("/login", (req, res) => {
     let message = "";
+
     try {
         message = "User logged in successfully.";
         const { username, password } = req.body;
