@@ -29,15 +29,30 @@ server.get("/users", (req, res) => {
 
 server.post("/users", (req, res) => {
     const newUser = req.body;
+    let duplicate = false;
 
-    if (!newUser || !("username" in newUser) || !("password" in newUser) || !("role" in newUser)) {
+    if (!newUser || !("username" in newUser) || !("password" in newUser)) {
+        logger.error("New user must contain a username and password.");
         res.status(HttpStatusCodes.BAD_REQUEST);
-        logger.error("Error adding new user.");
-        res.json({ message: "Error adding new user." });
+        res.json({ message: "New user must contain a username and password." });
     } else {
-        users.push(newUser);
-        logger.info("New user added.");
-        res.json({ message: "New user added." });
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].username !== newUser.username) continue;
+            duplicate = true;
+        }
+
+        if (!duplicate) {
+            newUser.role = "Employee";
+            users.push(newUser);
+
+            logger.info("New user added.");
+            res.status(HttpStatusCodes.CREATED);
+            res.json({ message: "New user added." });
+        } else {
+            logger.error("Username already taken.");
+            res.status(HttpStatusCodes.BAD_REQUEST);
+            res.json({ message: "Username already taken." });
+        }
     }
 });
 
