@@ -42,6 +42,7 @@ server.post("/users", (req, res) => {
         }
 
         if (!duplicate) {
+            newUser.id = crypto.randomUUID();
             newUser.role = "Employee";
             users.push(newUser);
 
@@ -63,6 +64,10 @@ server.get("/tickets", (req, res) => {
         message: "Tickets retrieved.",
         data: tickets
     })
+})
+
+server.post("/tickets", (req, res) => {
+    // const newTicket = req.body;
 })
 
 server.listen(PORT, () => {
