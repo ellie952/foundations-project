@@ -63,11 +63,25 @@ server.get("/tickets", (req, res) => {
     res.json({
         message: "Tickets retrieved.",
         data: tickets
-    })
+    });
 })
 
 server.post("/tickets", (req, res) => {
-    // const newTicket = req.body;
+    const newTicket = req.body;
+    let duplicate = false;
+
+    if (!newTicket || !("author" in newTicket) || !("description" in newTicket) || !("type" in newTicket) || !("amount" in newTicket)) {
+        logger.error("New ticket must contain an author, description, type, and amount.");
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: "New ticket must contain an author, description, type, and amount." });
+    } else {
+        newTicket.id = crypto.randomUUID();
+        tickets.push(newTicket);
+
+        logger.info("New ticket added.");
+        res.status(HttpStatusCodes.CREATED);
+        res.json({ message: "New ticket added." });
+    }
 })
 
 server.listen(PORT, () => {
