@@ -18,6 +18,7 @@ const HttpStatusCodes = {
     INTERNAL_SERVER_ERROR: 500
 }
 
+// Get all users
 server.get("/users", (req, res) => {
     logger.info("Users retrieved.");
     res.status(HttpStatusCodes.OK);
@@ -60,14 +61,27 @@ server.post("/users/register", (req, res) => {
 
 // Login
 server.post("/users/login", (req, res) => {
-    const unauthorizedUser = req.body;
+    const credentials = req.body;
+    let authorizedUser = null;
 
-    if (!unauthorizedUser || !("username" in unauthorizedUser) || !("password" in unauthorizedUser)) {
-        logger.error("To log in, you must enter a username and password.");
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "To log in, you must enter a username and password." });
+    if (!credentials || !("username" in credentials) || !("password" in credentials)) {
+        logger.error("Attempted login without username and password.");
+        return res.status(HttpStatusCodes.BAD_REQUEST)
+            .json({ message: "To log in, you must enter a username and password." });
     } else {
-        // if user exists and password is correct
+        for (let i = 0; i < users.length; i++) {
+            if ((users[i].username === credentials.username) && (users[i].password === credentials.password)) {
+                authorizedUser = users[i];
+            }
+        }
+    }
+
+    if (!authorizedUser) {
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: "Invalid credentials." });
+    } else {
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: "User authorized", data: authorizedUser });
     }
 });
 
