@@ -13,6 +13,8 @@ const HttpStatusCodes = {
 
 const ticketController = express.Router();
 
+// TODO: use try-catch like userController.js
+
 // Get all tickets
 ticketController.get("/", (req, res) => {
     logger.info("Tickets retrieved.");

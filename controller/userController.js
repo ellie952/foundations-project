@@ -15,39 +15,58 @@ const userController = express.Router();
 
 // Get all users
 userController.get("/", (req, res) => {
-    logger.info("Users retrieved.");
-    res.status(HttpStatusCodes.OK);
-    res.json({
-        message: "Users retrieved.",
-        data: fetchAllUsers()
-    });
+    let message = "";
+
+    try {
+        message = "Users retrieved."
+        res.status(HttpStatusCodes.OK);
+        res.json({
+            message: message,
+            data: fetchAllUsers()
+        });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(err.message);
+    }
 });
 
 // Register
 userController.post("/register", (req, res) => {
-    const newUser = req.body;
-    const registeredUser = addNewUser(newUser);
+    let message = "";
 
-    if (registeredUser) {
+    try {
+        message = "User registered successfully."
+        const newUser = req.body;
+        addNewUser(newUser);
         res.status(HttpStatusCodes.CREATED);
-        res.json({ message: "User registered successfully." });
-    } else {
+        res.json({ message: message });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
         res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "Error registering new user." });
+        res.json({ message: message });
+        logger.error(message);
     }
 });
 
 // Login
 userController.post("/login", (req, res) => {
-    const { username, password } = req.body;
-    const loggedInUser = validateLogin(username, password);
-
-    if (loggedInUser) {
-        res.status(HttpStatusCodes.OK);
-        res.json({ message: "User successfully logged in.", data: loggedInUser });
-    } else {
+    let message = "";
+    try {
+        message = "User logged in successfully.";
+        const { username, password } = req.body;
+        validateLogin(username, password);
+        res.status(HttpStatusCodes.CREATED);
+        res.json({ message: message });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
         res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "Error registering new user." });
+        res.json({ message: message });
+        logger.error(message);
     }
 });
 
