@@ -13,38 +13,56 @@ const HttpStatusCodes = {
 
 const ticketController = express.Router();
 
-// TODO: use try-catch like userController.js
-
 // Get all tickets
 ticketController.get("/", (req, res) => {
-    logger.info("Tickets retrieved.");
-    res.status(HttpStatusCodes.OK);
-    res.json({
-        message: "Tickets retrieved.",
-        data: fetchAllTickets()
-    });
-})
+    let message = "";
+
+    try {
+        message = "Tickets retrieved.";
+
+        res.status(HttpStatusCodes.OK);
+        res.json({
+            message: message,
+            data: fetchAllTickets()
+        });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
 
 // Submit ticket
 ticketController.post("/", async (req, res) => {
-    const newTicketDetails = req.body;
-    const newTicket = await addNewTicket(newTicketDetails);
+    let message = "";
 
-    if (newTicket) {
+    try {
+        message = "Ticket created successfully.";
+
+        const newTicketDetails = req.body;
+        const newTicket = await addNewTicket(newTicketDetails);
         res.status(HttpStatusCodes.CREATED);
-        res.json({ message: "Ticket created successfully.", data: newTicket });
-    } else {
+        res.json({ message: message, data: newTicket });
+        logger.info(message);
+    } catch (error) {
+        message = "Error registering new user.";
+
         res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: "Error registering new user." });
+        res.json({ message: message });
+        logger.error(message);
     }
-})
+});
 
 ticketController.get("/:id", async (req, res) => {
-    const { id } = req.params;
     let message = "";
 
     try {
         message = "Ticket retrieved successfully.";
+
+        const { id } = req.params;
         const ticket = await getTicketById(id);
         res.status(HttpStatusCodes.OK);
         res.json({ message: message, data: ticket });
