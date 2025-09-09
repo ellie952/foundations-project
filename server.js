@@ -3,9 +3,9 @@ const { logger } = require("./logger/logger.js");
 const userController = require("./controller/userController.js");
 const ticketController = require("./controller/ticketController.js");
 
-const server = express();
-
 const PORT = 3000;
+
+const server = express();
 
 server.use(express.json());
 server.use("/users", userController);
