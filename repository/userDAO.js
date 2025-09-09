@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand, PutCommand, UpdateCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, GetCommand, PutCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
 const client = new DynamoDBClient({ region: "us-east-2" });
 
@@ -36,7 +36,7 @@ async function getUser(id) {
 }
 
 async function updateUser(updatedUser) {
-    const command = new UpdateCommand({
+    const command = new PutCommand({
         TableName: "users",
         Item: updatedUser
     });
