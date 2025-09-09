@@ -36,4 +36,4 @@ async function deleteTicketById(id) {
     }
 }
 
-module.exports = { fetchAllTickets, getTicketById, addNewTicket, deleteTicketById };
+module.exports = { getTicketById, addNewTicket, deleteTicketById };

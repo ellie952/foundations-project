@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("../logger/logger.js");
-const { fetchAllUsers, addNewUser, validateLogin } = require("../service/userService.js");
+const { fetchAllUsers, addNewUser, validateLogin, getUserById } = require("../service/userService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -30,6 +30,25 @@ userController.get("/", (req, res) => {
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(err.message);
+    }
+});
+
+userController.get("/:id", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "User retrieved successfully."
+
+        const { id } = req.params;
+        const user = await getUserById(id);
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message, data: user });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
     }
 });
 

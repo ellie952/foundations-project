@@ -31,4 +31,25 @@ async function addNewUser(newUser) {
     }
 }
 
-module.exports = { fetchAllUsers, validateLogin, addNewUser };
+async function getUserById(id) {
+    const user = await userDAO.getUser(id);
+
+    if (!user) {
+        let message = `Cannot find user with ID ${id}.`;
+        logger.error(message);
+        throw new Error(message);
+    } else {
+        return user;
+    }
+}
+
+async function deleteUserById(id) {
+    try {
+        await userDAO.deleteUser(id);
+        return id;
+    } catch (error) {
+        throw new Error(`Cannot find user with ID ${id}.`);
+    }
+}
+
+module.exports = { fetchAllUsers, validateLogin, getUserById, addNewUser, deleteUserById };
