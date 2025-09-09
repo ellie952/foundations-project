@@ -1,4 +1,5 @@
 const userDAO = require("../repository/userDAO.js");
+const { logger } = require("../logger/logger.js");
 // const users = require("../data/user.json");
 
 function fetchAllUsers() {

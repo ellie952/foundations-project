@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("../logger/logger.js");
-const { fetchAllUsers, addNewUser, validateLogin, getUserById } = require("../service/userService.js");
+const { fetchAllUsers, addNewUser, validateLogin, getUserById, deleteUserById } = require("../service/userService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -83,6 +83,26 @@ userController.post("/login", (req, res) => {
         res.json({ message: message });
         logger.info(message);
     } catch (err) {
+        message = err.message;
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
+
+userController.delete("/:id", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "User deleted successfully.";
+
+        const { id } = req.params;
+        await deleteUserById(id);
+
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message });
+        logger.info(message);
+    } catch (error) {
         message = err.message;
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
