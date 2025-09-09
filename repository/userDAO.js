@@ -51,18 +51,18 @@ async function updateUser(updatedUser) {
 }
 
 async function deleteUser(id) {
-    const command = new DeleteCommand({
-        TableName: "users",
-        Key: { id }
-    });
+    // const command = new DeleteCommand({
+    //     TableName: "users",
+    //     Key: { id }
+    // });
 
-    try {
-        await documentClient.send(command);
-        return id;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
+    // try {
+    //     await documentClient.send(command);
+    //     return id;
+    // } catch (err) {
+    //     console.error(err);
+    //     return null;
+    // }
 }
 
 module.exports = { createUser, getUser, updateUser, deleteUser };

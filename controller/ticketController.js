@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("../logger/logger.js");
-const { fetchAllTickets, addNewTicket } = require("../service/ticketService.js");
+const { fetchAllTickets, addNewTicket, getTicketById } = require("../service/ticketService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -36,6 +36,24 @@ ticketController.post("/", async (req, res) => {
     } else {
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: "Error registering new user." });
+    }
+})
+
+ticketController.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    let message = "";
+
+    try {
+        message = "Ticket retrieved successfully.";
+        const ticket = await getTicketById(id);
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message, data: ticket });
+        logger.info(message);
+    } catch (error) {
+        message = err.message;
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
     }
 })
 

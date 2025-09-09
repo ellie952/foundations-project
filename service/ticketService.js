@@ -5,6 +5,18 @@ function fetchAllTickets() {
     // return tickets;
 }
 
+async function getTicketById(id) {
+    const ticket = await ticketDAO.getTicket(id);
+
+    if (!ticket) {
+        let message = `Cannot find ticket with ID ${id}.`;
+        logger.error(message);
+        throw new Error(message);
+    } else {
+        return ticket;
+    }
+}
+
 async function addNewTicket(newTicket) {
     if (!("author" in newTicket) || !("description" in newTicket) || !("type" in newTicket) || !("amount" in newTicket)) {
         logger.error("New ticket must contain an author, description, type, and amount.");
@@ -19,4 +31,4 @@ async function addNewTicket(newTicket) {
     }
 }
 
-module.exports = { fetchAllTickets, addNewTicket };
+module.exports = { fetchAllTickets, getTicketById, addNewTicket };
