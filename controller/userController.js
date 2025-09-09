@@ -34,13 +34,13 @@ userController.get("/", (req, res) => {
 });
 
 // Register
-userController.post("/register", (req, res) => {
+userController.post("/register", async (req, res) => {
     let message = "";
 
     try {
         message = "User registered successfully."
         const newUser = req.body;
-        addNewUser(newUser);
+        await addNewUser(newUser);
         res.status(HttpStatusCodes.CREATED);
         res.json({ message: message });
         logger.info(message);
