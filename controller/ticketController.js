@@ -26,9 +26,9 @@ ticketController.get("/", (req, res) => {
 })
 
 // Submit ticket
-ticketController.post("/", (req, res) => {
+ticketController.post("/", async (req, res) => {
     const newTicketDetails = req.body;
-    const newTicket = addNewTicket(newTicketDetails);
+    const newTicket = await addNewTicket(newTicketDetails);
 
     if (newTicket) {
         res.status(HttpStatusCodes.CREATED);
