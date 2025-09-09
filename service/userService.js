@@ -1,5 +1,4 @@
 const userDAO = require("../repository/userDAO.js");
-const { logger } = require("../logger/logger.js");
 
 async function addNewUser(newUser) {
     if (!newUser || !("username" in newUser) || !("password" in newUser)) {
@@ -16,9 +15,7 @@ async function getUserById(id) {
     const user = await userDAO.getUser(id);
 
     if (!user) {
-        let message = `Cannot find user with ID ${id}.`;
-        logger.error(message);
-        throw new Error(message);
+        throw new Error(`Cannot find user with ID ${id}.`);
     } else {
         return user;
     }
@@ -29,7 +26,7 @@ async function deleteUserById(id) {
         await userDAO.deleteUser(id);
         return id;
     } catch (error) {
-        throw new Error(`Cannot find user with ID ${id}.`);
+        throw new Error(`Cannot delete user with ID ${id}.`);
     }
 }
 
