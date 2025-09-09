@@ -6,7 +6,9 @@ async function addNewUser(newUser) {
     } else {
         const id = crypto.randomUUID();
         const { username, password } = newUser;
-        await userDAO.createUser({ id, username, password });
+        const role = "Employee";
+
+        await userDAO.createUser({ id, username, password, role });
         return newUser;
     }
 }
