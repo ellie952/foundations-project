@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("../logger/logger.js");
-const { fetchAllTickets, addNewTicket, getTicketById, deleteTicketById } = require("../service/ticketService.js");
+const ticketService = require("../service/ticketService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -23,7 +23,7 @@ ticketController.get("/", (req, res) => {
         res.status(HttpStatusCodes.OK);
         res.json({
             message: message,
-            data: fetchAllTickets()
+            data: ticketService.fetchAllTickets()
         });
         logger.info(message);
     } catch (err) {
@@ -43,7 +43,7 @@ ticketController.post("/", async (req, res) => {
         message = "Ticket created successfully.";
 
         const newTicketDetails = req.body;
-        const newTicket = await addNewTicket(newTicketDetails);
+        const newTicket = await ticketService.addNewTicket(newTicketDetails);
 
         res.status(HttpStatusCodes.CREATED);
         res.json({ message: message, data: newTicket });
@@ -64,7 +64,7 @@ ticketController.get("/:id", async (req, res) => {
         message = "Ticket retrieved successfully.";
 
         const { id } = req.params;
-        const ticket = await getTicketById(id);
+        const ticket = await ticketService.getTicketById(id);
 
         res.status(HttpStatusCodes.OK);
         res.json({ message: message, data: ticket });
@@ -85,7 +85,7 @@ ticketController.delete("/:id", async (req, res) => {
         message = "Ticket deleted successfully.";
 
         const { id } = req.params;
-        await deleteTicketById(id);
+        await ticketService.deleteTicketById(id);
 
         res.status(HttpStatusCodes.OK);
         res.json({ message: message });
