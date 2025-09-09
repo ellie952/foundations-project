@@ -21,14 +21,14 @@ async function getUserById(id) {
     }
 }
 
-// async function updateUser(updatedUser) {
-//     try {
-//         await userDAO.updateUser(updatedUser);
-//         return updatedUser.id;
-//     } catch (err) {
-//         throw new Error(err.message);
-//     }
-// }
+async function updateUser(updatedUser) {
+    try {
+        await userDAO.updateUser(updatedUser);
+        return updatedUser.id;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
 
 async function deleteUserById(id) {
     try {
@@ -58,4 +58,4 @@ async function deleteUserById(id) {
 //     throw new Error("Invalid user credentials.");
 // }
 
-module.exports = { addNewUser, getUserById, deleteUserById };
+module.exports = { addNewUser, getUserById, updateUser, deleteUserById };

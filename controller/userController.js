@@ -13,7 +13,6 @@ const HttpStatusCodes = {
 
 const userController = express.Router();
 
-// Register
 userController.post("/register", async (req, res) => {
     let message = "";
 
@@ -56,26 +55,26 @@ userController.get("/:id", async (req, res) => {
     }
 });
 
-// userController.put("/update", async (req, res) => {
-//     let message = "";
+userController.put("/update", async (req, res) => {
+    let message = "";
 
-//     try {
-//         message = "User updated successfully."
+    try {
+        message = "User updated successfully."
 
-//         const { updatedUser } = req.body;
-//         await userService.updateUser(updatedUser);
+        const updatedUser = req.body;
+        await userService.updateUser(updatedUser);
 
-//         res.status(HttpStatusCodes.OK);
-//         res.json({ message: message });
-//         logger.info(message);
-//     } catch (err) {
-//         message = err.message;
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
 
-//         res.status(HttpStatusCodes.BAD_REQUEST);
-//         res.json({ message: message });
-//         logger.error(message);
-//     }
-// });
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
 
 userController.delete("/:id", async (req, res) => {
     let message = "";
@@ -118,7 +117,6 @@ userController.delete("/:id", async (req, res) => {
 //     }
 // });
 
-// Login
 // userController.post("/login", (req, res) => {
 //     let message = "";
 

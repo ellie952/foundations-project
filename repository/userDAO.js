@@ -35,6 +35,21 @@ async function getUser(id) {
     }
 }
 
+async function updateUser(updatedUser) {
+    const command = new PutCommand({
+        TableName: "users",
+        Item: updatedUser
+    });
+
+    try {
+        await documentClient.send(command);
+        return updatedUser;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
 async function deleteUser(id) {
     const command = new DeleteCommand({
         TableName: "users",
@@ -50,19 +65,4 @@ async function deleteUser(id) {
     }
 }
 
-// async function updateUser(updatedUser) {
-//     const command = new PutCommand({
-//         TableName: "users",
-//         Item: updatedUser
-//     });
-
-//     try {
-//         await documentClient.send(command);
-//         return updatedUser;
-//     } catch (err) {
-//         console.error(err);
-//         return null;
-//     }
-// }
-
-module.exports = { createUser, getUser, deleteUser };
+module.exports = { createUser, getUser, updateUser, deleteUser };
