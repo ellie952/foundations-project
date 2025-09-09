@@ -22,6 +22,15 @@ async function getTicketById(id) {
     }
 }
 
+async function updateTicket(updatedTicket) {
+    try {
+        await ticketDAO.updateTicket(updatedTicket);
+        return updatedTicket.id;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
 async function deleteTicketById(id) {
     try {
         await ticketDAO.deleteTicket(id);
@@ -31,4 +40,4 @@ async function deleteTicketById(id) {
     }
 }
 
-module.exports = { getTicketById, addNewTicket, deleteTicketById };
+module.exports = { getTicketById, addNewTicket, updateTicket, deleteTicketById };

@@ -9,33 +9,10 @@ const HttpStatusCodes = {
     NOT_FOUND: 404,
     METHOD_NOT_ALLOWED: 405,
     INTERNAL_SERVER_ERROR: 500
-}
+};
 
 const ticketController = express.Router();
 
-// Get all tickets
-ticketController.get("/", (req, res) => {
-    let message = "";
-
-    try {
-        message = "Tickets retrieved.";
-
-        res.status(HttpStatusCodes.OK);
-        res.json({
-            message: message,
-            data: ticketService.fetchAllTickets()
-        });
-        logger.info(message);
-    } catch (err) {
-        message = err.message;
-
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: message });
-        logger.error(message);
-    }
-});
-
-// Submit ticket
 ticketController.post("/", async (req, res) => {
     let message = "";
 
@@ -76,7 +53,28 @@ ticketController.get("/:id", async (req, res) => {
         res.json({ message: message });
         logger.error(message);
     }
-})
+});
+
+ticketController.put("/update", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "Ticket updated successfully."
+
+        const updatedTicket = req.body;
+        await ticketService.updateTicket(updatedTicket);
+
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
 
 ticketController.delete("/:id", async (req, res) => {
     let message = "";
@@ -97,6 +95,27 @@ ticketController.delete("/:id", async (req, res) => {
         res.json({ message: message });
         logger.error(message);
     }
-})
+});
+
+// ticketController.get("/", (req, res) => {
+//     let message = "";
+
+//     try {
+//         message = "Tickets retrieved.";
+
+//         res.status(HttpStatusCodes.OK);
+//         res.json({
+//             message: message,
+//             data: ticketService.fetchAllTickets()
+//         });
+//         logger.info(message);
+//     } catch (err) {
+//         message = err.message;
+
+//         res.status(HttpStatusCodes.BAD_REQUEST);
+//         res.json({ message: message });
+//         logger.error(message);
+//     }
+// });
 
 module.exports = ticketController;

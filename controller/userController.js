@@ -97,7 +97,6 @@ userController.delete("/:id", async (req, res) => {
     }
 });
 
-// Get all users
 // userController.get("/", (req, res) => {
 //     let message = "";
 
