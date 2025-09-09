@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("../logger/logger.js");
-const { fetchAllTickets, addNewTicket, getTicketById } = require("../service/ticketService.js");
+const { fetchAllTickets, addNewTicket, getTicketById, deleteTicketById } = require("../service/ticketService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -66,6 +66,26 @@ ticketController.get("/:id", async (req, res) => {
         const ticket = await getTicketById(id);
         res.status(HttpStatusCodes.OK);
         res.json({ message: message, data: ticket });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+})
+
+ticketController.delete("/:id", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "Ticket deleted successfully.";
+
+        const { id } = req.params;
+        await deleteTicketById(id);
+
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message });
         logger.info(message);
     } catch (error) {
         message = err.message;

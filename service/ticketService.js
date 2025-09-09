@@ -31,4 +31,13 @@ async function addNewTicket(newTicket) {
     }
 }
 
-module.exports = { fetchAllTickets, getTicketById, addNewTicket };
+async function deleteTicketById(id) {
+    try {
+        await ticketDAO.deleteTicket(id);
+        return id;
+    } catch (error) {
+        throw new Error(`Cannot find ticket with ID ${id}.`);
+    }
+}
+
+module.exports = { fetchAllTickets, getTicketById, addNewTicket, deleteTicketById };
