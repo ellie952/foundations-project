@@ -44,6 +44,7 @@ ticketController.post("/", async (req, res) => {
 
         const newTicketDetails = req.body;
         const newTicket = await addNewTicket(newTicketDetails);
+
         res.status(HttpStatusCodes.CREATED);
         res.json({ message: message, data: newTicket });
         logger.info(message);
@@ -64,11 +65,13 @@ ticketController.get("/:id", async (req, res) => {
 
         const { id } = req.params;
         const ticket = await getTicketById(id);
+
         res.status(HttpStatusCodes.OK);
         res.json({ message: message, data: ticket });
         logger.info(message);
     } catch (err) {
         message = err.message;
+
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
@@ -89,6 +92,7 @@ ticketController.delete("/:id", async (req, res) => {
         logger.info(message);
     } catch (error) {
         message = err.message;
+
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);

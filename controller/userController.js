@@ -19,13 +19,16 @@ userController.post("/register", async (req, res) => {
 
     try {
         message = "User registered successfully."
+
         const newUser = req.body;
         await addNewUser(newUser);
+
         res.status(HttpStatusCodes.CREATED);
         res.json({ message: message });
         logger.info(message);
     } catch (err) {
         message = err.message;
+
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
@@ -40,11 +43,13 @@ userController.get("/:id", async (req, res) => {
 
         const { id } = req.params;
         const user = await getUserById(id);
+
         res.status(HttpStatusCodes.OK);
         res.json({ message: message, data: user });
         logger.info(message);
     } catch (err) {
         message = err.message;
+
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
@@ -65,6 +70,7 @@ userController.delete("/:id", async (req, res) => {
         logger.info(message);
     } catch (error) {
         message = err.message;
+
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
