@@ -1,6 +1,6 @@
 const express = require("express");
 const { logger } = require("../logger/logger.js");
-const { addNewUser, getUserById, deleteUserById } = require("../service/userService.js");
+const userService = require("../service/userService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -21,7 +21,7 @@ userController.post("/register", async (req, res) => {
         message = "User registered successfully."
 
         const newUser = req.body;
-        await addNewUser(newUser);
+        await userService.addNewUser(newUser);
 
         res.status(HttpStatusCodes.CREATED);
         res.json({ message: message });
@@ -42,7 +42,7 @@ userController.get("/:id", async (req, res) => {
         message = "User retrieved successfully."
 
         const { id } = req.params;
-        const user = await getUserById(id);
+        const user = await userService.getUserById(id);
 
         res.status(HttpStatusCodes.OK);
         res.json({ message: message, data: user });
@@ -56,6 +56,27 @@ userController.get("/:id", async (req, res) => {
     }
 });
 
+// userController.put("/update", async (req, res) => {
+//     let message = "";
+
+//     try {
+//         message = "User updated successfully."
+
+//         const { updatedUser } = req.body;
+//         await userService.updateUser(updatedUser);
+
+//         res.status(HttpStatusCodes.OK);
+//         res.json({ message: message });
+//         logger.info(message);
+//     } catch (err) {
+//         message = err.message;
+
+//         res.status(HttpStatusCodes.BAD_REQUEST);
+//         res.json({ message: message });
+//         logger.error(message);
+//     }
+// });
+
 userController.delete("/:id", async (req, res) => {
     let message = "";
 
@@ -63,7 +84,7 @@ userController.delete("/:id", async (req, res) => {
         message = "User deleted successfully.";
 
         const { id } = req.params;
-        await deleteUserById(id);
+        await userService.deleteUserById(id);
 
         res.status(HttpStatusCodes.OK);
         res.json({ message: message });

@@ -26,8 +26,8 @@ async function deleteTicketById(id) {
     try {
         await ticketDAO.deleteTicket(id);
         return id;
-    } catch (error) {
-        throw new Error(`Cannot find ticket with ID ${id}.`);
+    } catch (err) {
+        throw new Error(err.message);
     }
 }
 
