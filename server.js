@@ -1,7 +1,7 @@
 const express = require("express");
-const { logger } = require("./logger/logger.js");
-const userController = require("./controller/userController.js");
-const ticketController = require("./controller/ticketController.js");
+const { logger } = require("./src/utils/logger/logger.js");
+const userController = require("./src/controller/userController.js");
+const ticketController = require("./src/controller/ticketController.js");
 
 const PORT = 3000;
 

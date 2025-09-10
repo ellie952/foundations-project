@@ -1,6 +1,6 @@
 const express = require("express");
-const { logger } = require("../logger/logger.js");
-const ticketService = require("../service/ticketService.js");
+const { logger } = require("../utils/logger/logger.js");
+const userService = require("../service/userService.js");
 
 const HttpStatusCodes = {
     OK: 200,
@@ -9,62 +9,20 @@ const HttpStatusCodes = {
     NOT_FOUND: 404,
     METHOD_NOT_ALLOWED: 405,
     INTERNAL_SERVER_ERROR: 500
-};
+}
 
-const ticketController = express.Router();
+const userController = express.Router();
 
-ticketController.post("/", async (req, res) => {
+userController.post("/register", async (req, res) => {
     let message = "";
 
     try {
-        message = "Ticket created successfully.";
+        message = "User registered successfully."
 
-        const newTicketDetails = req.body;
-        const newTicket = await ticketService.addNewTicket(newTicketDetails);
+        const newUser = req.body;
+        await userService.addNewUser(newUser);
 
         res.status(HttpStatusCodes.CREATED);
-        res.json({ message: message, data: newTicket });
-        logger.info(message);
-    } catch (error) {
-        message = "Error registering new user.";
-
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: message });
-        logger.error(message);
-    }
-});
-
-ticketController.get("/:id", async (req, res) => {
-    let message = "";
-
-    try {
-        message = "Ticket retrieved successfully.";
-
-        const { id } = req.params;
-        const ticket = await ticketService.getTicketById(id);
-
-        res.status(HttpStatusCodes.OK);
-        res.json({ message: message, data: ticket });
-        logger.info(message);
-    } catch (err) {
-        message = err.message;
-
-        res.status(HttpStatusCodes.BAD_REQUEST);
-        res.json({ message: message });
-        logger.error(message);
-    }
-});
-
-ticketController.put("/update", async (req, res) => {
-    let message = "";
-
-    try {
-        message = "Ticket updated successfully."
-
-        const updatedTicket = req.body;
-        await ticketService.updateTicket(updatedTicket);
-
-        res.status(HttpStatusCodes.OK);
         res.json({ message: message });
         logger.info(message);
     } catch (err) {
@@ -76,14 +34,56 @@ ticketController.put("/update", async (req, res) => {
     }
 });
 
-ticketController.delete("/:id", async (req, res) => {
+userController.get("/:id", async (req, res) => {
     let message = "";
 
     try {
-        message = "Ticket deleted successfully.";
+        message = "User retrieved successfully."
 
         const { id } = req.params;
-        await ticketService.deleteTicketById(id);
+        const user = await userService.getUserById(id);
+
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message, data: user });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
+
+userController.put("/update", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "User updated successfully."
+
+        const updatedUser = req.body;
+        await userService.updateUser(updatedUser);
+
+        res.status(HttpStatusCodes.OK);
+        res.json({ message: message });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
+
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
+
+userController.delete("/:id", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "User deleted successfully.";
+
+        const { id } = req.params;
+        await userService.deleteUserById(id);
 
         res.status(HttpStatusCodes.OK);
         res.json({ message: message });
@@ -97,25 +97,41 @@ ticketController.delete("/:id", async (req, res) => {
     }
 });
 
-// ticketController.get("/", (req, res) => {
+// userController.get("/", (req, res) => {
 //     let message = "";
 
 //     try {
-//         message = "Tickets retrieved.";
-
+//         message = "Users retrieved."
 //         res.status(HttpStatusCodes.OK);
 //         res.json({
 //             message: message,
-//             data: ticketService.fetchAllTickets()
+//             data: fetchAllUsers()
 //         });
 //         logger.info(message);
 //     } catch (err) {
 //         message = err.message;
+//         res.status(HttpStatusCodes.BAD_REQUEST);
+//         res.json({ message: message });
+//         logger.error(err.message);
+//     }
+// });
 
+// userController.post("/login", (req, res) => {
+//     let message = "";
+
+//     try {
+//         message = "User logged in successfully.";
+//         const { username, password } = req.body;
+//         validateLogin(username, password);
+//         res.status(HttpStatusCodes.CREATED);
+//         res.json({ message: message });
+//         logger.info(message);
+//     } catch (err) {
+//         message = err.message;
 //         res.status(HttpStatusCodes.BAD_REQUEST);
 //         res.json({ message: message });
 //         logger.error(message);
 //     }
 // });
 
-module.exports = ticketController;
+module.exports = userController;
