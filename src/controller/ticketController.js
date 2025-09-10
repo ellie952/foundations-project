@@ -1,5 +1,5 @@
 const express = require("express");
-const { logger } = require("../utils/logger/logger.js");
+const { logger } = require("../util/logger/logger.js");
 const ticketService = require("../service/ticketService.js");
 
 const HttpStatusCodes = {

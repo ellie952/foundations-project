@@ -1,13 +1,15 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand, PutCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, GetCommand, PutCommand, ScanCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
 const client = new DynamoDBClient({ region: "us-east-2" });
 
 const documentClient = DynamoDBDocumentClient.from(client);
 
+const TableName = "users";
+
 async function createUser(user) {
     const command = new PutCommand({
-        TableName: "users",
+        TableName,
         Item: user
     });
 
@@ -15,14 +17,13 @@ async function createUser(user) {
         await documentClient.send(command);
         return user;
     } catch (err) {
-        console.error(err);
         return null;
     }
 }
 
-async function getUser(id) {
+async function getUserById(id) {
     const command = new GetCommand({
-        TableName: "users",
+        TableName,
         Key: { id }
     });
 
@@ -30,14 +31,29 @@ async function getUser(id) {
         const data = await documentClient.send(command);
         return data.Item;
     } catch (error) {
-        console.error(error);
+        return null;
+    }
+}
+
+async function getUserByUsername(username) {
+    const command = new ScanCommand({
+        TableName,
+        FilterExpression: "#username = :username",
+        ExpressionAttributeNames: { "#username": "username" },
+        ExpressionAttributeValues: { ":username": username }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data.Items[0];
+    } catch (err) {
         return null;
     }
 }
 
 async function updateUser(updatedUser) {
     const command = new PutCommand({
-        TableName: "users",
+        TableName,
         Item: updatedUser
     });
 
@@ -45,14 +61,13 @@ async function updateUser(updatedUser) {
         await documentClient.send(command);
         return updatedUser;
     } catch (err) {
-        console.error(err);
         return null;
     }
 }
 
 async function deleteUser(id) {
     const command = new DeleteCommand({
-        TableName: "users",
+        TableName,
         Key: { id }
     });
 
@@ -60,9 +75,8 @@ async function deleteUser(id) {
         await documentClient.send(command);
         return id;
     } catch (err) {
-        console.error(err);
         return null;
     }
 }
 
-module.exports = { createUser, getUser, updateUser, deleteUser };
+module.exports = { createUser, getUserById, getUserByUsername, updateUser, deleteUser };

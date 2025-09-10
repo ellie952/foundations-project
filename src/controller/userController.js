@@ -1,6 +1,9 @@
 const express = require("express");
-const { logger } = require("../utils/logger/logger.js");
+const jwt = require("jsonwebtoken");
+const { logger } = require("../util/logger/logger.js");
 const userService = require("../service/userService.js");
+
+const secretKey = "secret";
 
 const HttpStatusCodes = {
     OK: 200,
@@ -28,6 +31,36 @@ userController.post("/register", async (req, res) => {
     } catch (err) {
         message = err.message;
 
+        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
+});
+
+userController.post("/login", async (req, res) => {
+    let message = "";
+
+    try {
+        message = "User logged in successfully.";
+        const { username, password } = req.body;
+
+        const data = await userService.validateLogin(username, password);
+        const token = jwt.sign(
+            {
+                id: data.id,
+                username
+            },
+            secretKey,
+            {
+                expiresIn: "15m"
+            }
+        );
+
+        res.status(HttpStatusCodes.CREATED);
+        res.json({ message: message, token });
+        logger.info(message);
+    } catch (err) {
+        message = err.message;
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
@@ -113,24 +146,6 @@ userController.delete("/:id", async (req, res) => {
 //         res.status(HttpStatusCodes.BAD_REQUEST);
 //         res.json({ message: message });
 //         logger.error(err.message);
-//     }
-// });
-
-// userController.post("/login", (req, res) => {
-//     let message = "";
-
-//     try {
-//         message = "User logged in successfully.";
-//         const { username, password } = req.body;
-//         validateLogin(username, password);
-//         res.status(HttpStatusCodes.CREATED);
-//         res.json({ message: message });
-//         logger.info(message);
-//     } catch (err) {
-//         message = err.message;
-//         res.status(HttpStatusCodes.BAD_REQUEST);
-//         res.json({ message: message });
-//         logger.error(message);
 //     }
 // });
 

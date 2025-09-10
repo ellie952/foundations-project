@@ -1,7 +1,8 @@
+const bcrypt = require("bcrypt");
 const userDAO = require("../repository/userDAO.js");
 
 async function addNewUser(newUser) {
-    if (!newUser || !("username" in newUser) || !("password" in newUser)) {
+    if (validateUser(user)) {
         throw new Error("New user must contain a username and password.");
     } else {
         const id = crypto.randomUUID();
@@ -14,12 +15,20 @@ async function addNewUser(newUser) {
 }
 
 async function getUserById(id) {
-    const user = await userDAO.getUser(id);
+    const user = await userDAO.getUserById(id);
 
     if (!user) {
         throw new Error(`Cannot find user with ID ${id}.`);
     } else {
         return user;
+    }
+}
+
+async function getUserByUsername(username) {
+    try {
+        return await userDAO.getUserByUsername(username);
+    } catch (err) {
+        throw new Error(err.message);
     }
 }
 
@@ -46,18 +55,18 @@ async function deleteUserById(id) {
 //     return users;
 // }
 
-// function validateLogin(username, password) {
-//     if (!username || !password) {
-//         throw new Error("Attempted login without username and password.");
-//     } else {
-//         for (let i = 0; i < users.length; i++) {
-//             if ((users[i].username === username) && (users[i].password === password)) {
-//                 return users[i];
-//             }
-//         }
-//     }
+function validateUser(user) {
+    return user.username.length > 0 && user.password.length > 0;
+}
 
-//     throw new Error("Invalid user credentials.");
-// }
+async function validateLogin(username, password) {
+    try {
+        const user = await getUserByUsername(username);
+        await bcrypt.compare(password, user.password);
+        return user;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
 
-module.exports = { addNewUser, getUserById, updateUser, deleteUserById };
+module.exports = { addNewUser, getUserById, updateUser, deleteUserById, validateLogin };
