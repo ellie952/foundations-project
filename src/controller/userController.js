@@ -4,17 +4,9 @@ const { logger } = require("../util/logger/logger.js");
 const { validateLogin } = require("../util/user/login.js");
 const { validateNewUser } = require("../util/user/register.js");
 const userService = require("../service/userService.js");
+const HttpStatusCodes = require("../util/http/statusCodes.js");
 
 const secretKey = "secret";
-
-const HttpStatusCodes = {
-    OK: 200,
-    CREATED: 201,
-    BAD_REQUEST: 400,
-    NOT_FOUND: 404,
-    METHOD_NOT_ALLOWED: 405,
-    INTERNAL_SERVER_ERROR: 500
-}
 
 const userController = express.Router();
 
