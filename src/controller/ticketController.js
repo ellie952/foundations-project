@@ -2,11 +2,11 @@ const express = require("express");
 const { logger } = require("../util/logger/logger.js");
 const ticketService = require("../service/ticketService.js");
 const HttpStatusCodes = require("../util/http/statusCodes.js");
-
+const { validateNewTicket } = require("../util/ticket/ticket.js");
 
 const ticketController = express.Router();
 
-ticketController.post("/", async (req, res) => {
+ticketController.post("/", validateNewTicket, async (req, res) => {
     let message = "";
 
     try {
@@ -19,7 +19,7 @@ ticketController.post("/", async (req, res) => {
         res.json({ message: message, data: newTicket });
         logger.info(message);
     } catch (error) {
-        message = "Error registering new user.";
+        message = "Error submitting new ticket.";
 
         res.status(HttpStatusCodes.BAD_REQUEST);
         res.json({ message: message });

@@ -1,14 +1,14 @@
 const ticketDAO = require("../repository/ticketDAO.js");
 
 async function addNewTicket(newTicket) {
-    if (!("author" in newTicket) || !("description" in newTicket) || !("type" in newTicket) || !("amount" in newTicket)) {
-        throw new Error("New ticket must contain an author, description, type, and amount.");
-    } else {
+    try {
         newTicket.id = crypto.randomUUID();
         newTicket.status = "Pending";
 
         await ticketDAO.createTicket(newTicket);
         return newTicket;
+    } catch (err) {
+        throw new Error(err.message);
     }
 }
 
