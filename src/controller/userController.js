@@ -38,10 +38,11 @@ userController.post("/login", async (req, res) => {
         message = "User logged in successfully.";
         const { username, password } = req.body;
 
-        const data = await validateLogin(username, password);
+        const user = await validateLogin(username, password);
+
         const token = jwt.sign(
             {
-                id: data.id,
+                id: user.id,
                 username
             },
             secretKey,

@@ -1,15 +1,18 @@
 const bcrypt = require("bcrypt");
 const userDAO = require("../repository/userDAO.js");
 
-async function addNewUser(newUser) {
+async function addNewUser(userDetails) {
+    const saltRounds = 10;
+
     try {
-        const saltRounds = 10;
         const id = crypto.randomUUID();
-        const username = newUser.username;
-        const password = await bcrypt.hash(newUser.password, saltRounds);
+        const username = userDetails.username;
+        const password = await bcrypt.hash(userDetails.password, saltRounds);
         const role = "Employee";
 
-        await userDAO.createUser({ id, username, password, role });
+        const newUser = { id, username, password, role };
+
+        await userDAO.createUser(newUser);
         return newUser;
     } catch (err) {
         throw new Error(err.message);

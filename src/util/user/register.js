@@ -12,7 +12,7 @@ async function validateNewUser(req, res, next) {
                 next();
             }
         } else {
-            res.status(HttpStatusCodes.BAD_REQUEST).json({ message: "Invalid username or password." });
+            res.status(HttpStatusCodes.BAD_REQUEST).json({ message: "New users need a username and a password." });
         }
     } catch (err) {
         throw new Error(err.message);
