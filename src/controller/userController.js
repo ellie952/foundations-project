@@ -1,6 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { logger } = require("../util/logger/logger.js");
+const { validateLogin } = require("../util/user/login.js");
+const { validateNewUser } = require("../util/user/register.js");
 const userService = require("../service/userService.js");
 
 const secretKey = "secret";
@@ -16,7 +18,7 @@ const HttpStatusCodes = {
 
 const userController = express.Router();
 
-userController.post("/register", async (req, res) => {
+userController.post("/register", validateNewUser, async (req, res) => {
     let message = "";
 
     try {
@@ -44,7 +46,7 @@ userController.post("/login", async (req, res) => {
         message = "User logged in successfully.";
         const { username, password } = req.body;
 
-        const data = await userService.validateLogin(username, password);
+        const data = await validateLogin(username, password);
         const token = jwt.sign(
             {
                 id: data.id,

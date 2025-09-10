@@ -2,25 +2,26 @@ const bcrypt = require("bcrypt");
 const userDAO = require("../repository/userDAO.js");
 
 async function addNewUser(newUser) {
-    if (validateUser(user)) {
-        throw new Error("New user must contain a username and password.");
-    } else {
+    try {
+        const saltRounds = 10;
         const id = crypto.randomUUID();
-        const { username, password } = newUser;
+        const username = newUser.username;
+        const password = await bcrypt.hash(newUser.password, saltRounds);
         const role = "Employee";
 
         await userDAO.createUser({ id, username, password, role });
         return newUser;
+    } catch (err) {
+        throw new Error(err.message);
     }
 }
 
 async function getUserById(id) {
-    const user = await userDAO.getUserById(id);
-
-    if (!user) {
-        throw new Error(`Cannot find user with ID ${id}.`);
-    } else {
+    try {
+        const user = await userDAO.getUserById(id);
         return user;
+    } catch (err) {
+        throw new Error(err.message);
     }
 }
 
@@ -55,18 +56,4 @@ async function deleteUserById(id) {
 //     return users;
 // }
 
-function validateUser(user) {
-    return user.username.length > 0 && user.password.length > 0;
-}
-
-async function validateLogin(username, password) {
-    try {
-        const user = await getUserByUsername(username);
-        await bcrypt.compare(password, user.password);
-        return user;
-    } catch (err) {
-        throw new Error(err.message);
-    }
-}
-
-module.exports = { addNewUser, getUserById, updateUser, deleteUserById, validateLogin };
+module.exports = { addNewUser, getUserById, getUserByUsername, updateUser, deleteUserById };
