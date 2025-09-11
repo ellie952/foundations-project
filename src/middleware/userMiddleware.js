@@ -1,5 +1,5 @@
-const userDAO = require("../../repository/userDAO.js");
-const HTTP_STATUS_CODES = require("../statusCodes.js");
+const userDAO = require("../repository/userDAO.js");
+const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 
 async function validateNewUser(req, res, next) {
     try {
