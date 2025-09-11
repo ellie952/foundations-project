@@ -1,4 +1,4 @@
-const userService = require("../../service/userService.js");
+const userService = require("../service/userService.js");
 const bcrypt = require("bcrypt");
 
 async function validateLogin(username, password) {

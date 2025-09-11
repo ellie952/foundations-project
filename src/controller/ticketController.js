@@ -1,8 +1,8 @@
 const express = require("express");
-const { logger } = require("../util/logger/logger.js");
+const { logger } = require("../util/logger.js");
 const ticketService = require("../service/ticketService.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
-const { validateNewTicket } = require("../util/ticket/ticket.js");
+const { validateNewTicket } = require("../util/middleware/ticketMiddleware.js");
 
 const ticketController = express.Router();
 

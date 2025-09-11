@@ -1,5 +1,5 @@
 const express = require("express");
-const { logger } = require("./src/util/logger/logger.js");
+const { logger } = require("./src/util/logger.js");
 const userController = require("./src/controller/userController.js");
 const ticketController = require("./src/controller/ticketController.js");
 

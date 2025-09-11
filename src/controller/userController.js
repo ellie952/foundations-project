@@ -1,8 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { logger } = require("../util/logger/logger.js");
-const { validateLogin } = require("../util/user/login.js");
-const { validateNewUser } = require("../util/user/register.js");
+const { logger } = require("../util/logger.js");
+const { validateLogin } = require("../util/login.js");
+const { validateNewUser } = require("../util/middleware/userMiddleware.js");
 const userService = require("../service/userService.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 

@@ -1,4 +1,4 @@
-const HTTP_STATUS_CODES = require("../statusCodes.js");
+const HTTP_STATUS_CODES = require("./statusCodes.js");
 const jwt = require("jsonwebtoken");
 
 const secretKey = "secret";
