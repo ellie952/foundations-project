@@ -2,7 +2,7 @@ const express = require("express");
 const { logger } = require("../util/logger.js");
 const ticketService = require("../service/ticketService.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
-const { validateNewTicket } = require("../middleware/ticketMiddleware.js");
+const { validateNewTicket, checkStatus } = require("../middleware/ticketMiddleware.js");
 const { validateRole } = require("../middleware/userMiddleware.js");
 const { authenticateToken } = require("../util/jwt.js");
 
@@ -70,7 +70,7 @@ ticketController.get("/status/:ticketStatus", authenticateToken, validateRole, a
     }
 });
 
-ticketController.put("/update/:id", authenticateToken, validateRole, async (req, res) => {
+ticketController.put("/update/:id", authenticateToken, validateRole, checkStatus, async (req, res) => {
     let message = "";
 
     try {

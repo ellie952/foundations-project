@@ -13,4 +13,17 @@ function validateNewTicket(req, res, next) {
     }
 }
 
-module.exports = { validateNewTicket };
+function checkStatus(req, res, next) {
+    try {
+        const ticket = req.body;
+        if (ticket.amount === "pending") {
+            next();
+        } else {
+            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Ticket has already been processed." });
+        }
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+module.exports = { validateNewTicket, checkStatus };
