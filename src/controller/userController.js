@@ -43,7 +43,9 @@ userController.post("/login", async (req, res) => {
         const token = jwt.sign(
             {
                 id: user.id,
-                username
+                username,
+                password,
+                role: user.role
             },
             secretKey,
             {

@@ -4,6 +4,7 @@ const ticketService = require("../service/ticketService.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 const { validateNewTicket } = require("../middleware/ticketMiddleware.js");
 const { validateRole } = require("../middleware/userMiddleware.js");
+const { authenticateToken } = require("../util/jwt.js");
 
 const ticketController = express.Router();
 
@@ -49,8 +50,24 @@ ticketController.get("/:id", async (req, res) => {
     }
 });
 
-ticketController.get("/pending", validateRole, async (req, res) => {
-    // TODO
+ticketController.get("/status/:ticketStatus", authenticateToken, validateRole, async (req, res) => {
+    let message = "";
+
+    try {
+        message = "Tickets retrieved successfully.";
+
+        const { ticketStatus } = req.params;
+        const tickets = await ticketService.getTicketsByStatus(ticketStatus.toLowerCase());
+
+        res.status(HTTP_STATUS_CODES.OK);
+        res.json({ message: message, data: tickets });
+    } catch (err) {
+        message = err.message;
+
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+        res.json({ message: message });
+        logger.error(message);
+    }
 });
 
 ticketController.put("/update", async (req, res) => {

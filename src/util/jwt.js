@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const secretKey = "secret";
 
 async function authenticateToken(req, res, next) {
-    const authHeader = req.headers["Authorization"];
+    const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
@@ -25,11 +25,10 @@ async function decodeJWT(token) {
         const user = await jwt.verify(token, secretKey);
         return user;
     } catch (error) {
-        logger.error(err);
         return null;
     }
 }
 
 module.exports = {
-    authenticateToken
+    authenticateToken, decodeJWT
 }

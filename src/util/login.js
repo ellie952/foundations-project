@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 async function validateLogin(username, password) {
     try {
         const user = await userService.getUserByUsername(username);
-        console.log(user)
         if (await bcrypt.compare(password, user.password)) {
             return user;
         } else {

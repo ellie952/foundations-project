@@ -22,6 +22,17 @@ async function getTicketById(id) {
     }
 }
 
+async function getTicketsByStatus(ticketStatus) {
+    if (ticketStatus) {
+        const data = await ticketDAO.getTicketsByStatus(ticketStatus);
+        if (data) {
+            return data;
+        } else {
+            return null;
+        }
+    }
+}
+
 async function updateTicket(updatedTicket) {
     try {
         await ticketDAO.updateTicket(updatedTicket);
@@ -40,4 +51,4 @@ async function deleteTicketById(id) {
     }
 }
 
-module.exports = { getTicketById, addNewTicket, updateTicket, deleteTicketById };
+module.exports = { getTicketById, addNewTicket, getTicketsByStatus, updateTicket, deleteTicketById };
