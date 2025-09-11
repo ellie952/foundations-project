@@ -70,14 +70,15 @@ ticketController.get("/status/:ticketStatus", authenticateToken, validateRole, a
     }
 });
 
-ticketController.put("/update", async (req, res) => {
+ticketController.put("/update/:id", authenticateToken, validateRole, async (req, res) => {
     let message = "";
 
     try {
         message = "Ticket updated successfully."
 
-        const updatedTicket = req.body;
-        await ticketService.updateTicket(updatedTicket);
+        const { id } = req.params;
+        const { status } = req.body;
+        await ticketService.updateTicket(id, status);
 
         res.status(HTTP_STATUS_CODES.OK);
         res.json({ message: message });

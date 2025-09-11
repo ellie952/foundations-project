@@ -53,15 +53,18 @@ async function getTicketsByStatus(status) {
     }
 }
 
-async function updateTicket(updatedTicket) {
+async function updateTicket(id, status) {
+    const ticketToUpdate = await getTicket(id);
+    ticketToUpdate.status = status;
+
     const command = new PutCommand({
         TableName: "tickets",
-        Item: updatedTicket
+        Item: ticketToUpdate
     });
 
     try {
         await documentClient.send(command);
-        return updatedTicket;
+        return ticketToUpdate;
     } catch (err) {
         console.error(err);
         return null;

@@ -33,12 +33,16 @@ async function getTicketsByStatus(ticketStatus) {
     }
 }
 
-async function updateTicket(updatedTicket) {
-    try {
-        await ticketDAO.updateTicket(updatedTicket);
-        return updatedTicket.id;
-    } catch (err) {
-        throw new Error(err.message);
+async function updateTicket(id, status) {
+    if (status === "approved" || status === "denied") {
+        try {
+            await ticketDAO.updateTicket(id, status);
+            return id;
+        } catch (err) {
+            throw new Error(err.message);
+        }
+    } else {
+        return null;
     }
 }
 
