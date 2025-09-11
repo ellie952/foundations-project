@@ -14,7 +14,7 @@ userController.post("/register", validateNewUser, async (req, res) => {
     let message = "";
 
     try {
-        message = "User registered successfully."
+        message = "User registered successfully.";
 
         const newUser = req.body;
         await userService.addNewUser(newUser);
@@ -27,7 +27,7 @@ userController.post("/register", validateNewUser, async (req, res) => {
 
         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
-        logger.error(message);
+        logger.error(`Error registering new user: ${message}`);
     }
 });
 
@@ -39,7 +39,6 @@ userController.post("/login", async (req, res) => {
         const { username, password } = req.body;
 
         const user = await validateLogin(username, password);
-
         const token = jwt.sign(
             {
                 id: user.id,
@@ -58,19 +57,21 @@ userController.post("/login", async (req, res) => {
         logger.info(message);
     } catch (err) {
         message = err.message;
+
         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
-        logger.error(message);
+        logger.error(`Error logging in: ${message}`);
     }
 });
 
 userController.get("/:id", async (req, res) => {
     let message = "";
 
-    try {
-        message = "User retrieved successfully."
+    const { id } = req.params;
 
-        const { id } = req.params;
+    try {
+        message = "User retrieved successfully.";
+
         const user = await userService.getUserById(id);
 
         res.status(HTTP_STATUS_CODES.OK);
@@ -81,17 +82,18 @@ userController.get("/:id", async (req, res) => {
 
         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
-        logger.error(message);
+        logger.error(`Error fetching user with ID ${id}: ${message}`);
     }
 });
 
 userController.put("/update", async (req, res) => {
     let message = "";
 
-    try {
-        message = "User updated successfully."
+    const updatedUser = req.body;
 
-        const updatedUser = req.body;
+    try {
+        message = "User updated successfully.";
+
         await userService.updateUser(updatedUser);
 
         res.status(HTTP_STATUS_CODES.OK);
@@ -102,17 +104,18 @@ userController.put("/update", async (req, res) => {
 
         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
-        logger.error(message);
+        logger.error(`Error updating user ${updatedUser.username}: ${message}`);
     }
 });
 
 userController.delete("/:id", async (req, res) => {
     let message = "";
 
+    const { id } = req.params;
+
     try {
         message = "User deleted successfully.";
 
-        const { id } = req.params;
         await userService.deleteUserById(id);
 
         res.status(HTTP_STATUS_CODES.OK);
@@ -123,7 +126,7 @@ userController.delete("/:id", async (req, res) => {
 
         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
-        logger.error(message);
+        logger.error(`Error deleting user with ID ${id}: ${message}`);
     }
 });
 

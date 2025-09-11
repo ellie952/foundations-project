@@ -74,7 +74,7 @@ ticketController.put("/update/:id", authenticateToken, validateRole, checkStatus
     let message = "";
 
     try {
-        message = "Ticket updated successfully."
+        message = "Ticket updated successfully.";
 
         const { id } = req.params;
         const { status } = req.body;

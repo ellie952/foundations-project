@@ -2,7 +2,6 @@ const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, GetCommand, PutCommand, ScanCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
 const client = new DynamoDBClient({ region: "us-east-2" });
-
 const documentClient = DynamoDBDocumentClient.from(client);
 
 const TableName = "tickets";
@@ -17,7 +16,6 @@ async function createTicket(ticket) {
         await documentClient.send(command);
         return ticket;
     } catch (err) {
-        console.error(err);
         return null;
     }
 }
@@ -31,8 +29,7 @@ async function getTicket(id) {
     try {
         const data = await documentClient.send(command);
         return data.Item;
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
         return null;
     }
 }
@@ -48,7 +45,7 @@ async function getTicketsByStatus(status) {
     try {
         const data = await documentClient.send(command);
         return data.Items;
-    } catch (error) {
+    } catch (err) {
         return null;
     }
 }
@@ -66,7 +63,6 @@ async function updateTicket(id, status) {
         await documentClient.send(command);
         return ticketToUpdate;
     } catch (err) {
-        console.error(err);
         return null;
     }
 }
@@ -81,7 +77,6 @@ async function deleteTicket(id) {
         await documentClient.send(command);
         return id;
     } catch (err) {
-        console.error(err);
         return null;
     }
 }

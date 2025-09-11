@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const userDAO = require("../repository/userDAO.js");
+const { logger } = require("../util/logger.js");
 
 const saltRounds = 10;
 
@@ -15,7 +16,8 @@ async function addNewUser(userDetails) {
         await userDAO.createUser(newUser);
         return newUser;
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error adding new user: ${err.message}`);
+        return null;
     }
 }
 
@@ -24,7 +26,8 @@ async function getUserById(id) {
         const user = await userDAO.getUserById(id);
         return user;
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error getting user by ID ${id}: ${err.message}`);
+        return null;
     }
 }
 
@@ -32,7 +35,8 @@ async function getUserByUsername(username) {
     try {
         return await userDAO.getUserByUsername(username);
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error getting user ${username}: ${err.message}`);
+        return null;
     }
 }
 
@@ -48,7 +52,8 @@ async function updateUser(updatedUserDetails) {
         await userDAO.updateUser(updatedUser);
         return updatedUser.id;
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error updating user ${updatedUserDetails.username}: ${err.message}`);
+        return null;
     }
 }
 
@@ -57,7 +62,8 @@ async function deleteUserById(id) {
         await userDAO.deleteUser(id);
         return id;
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error deleting user with ID ${id}: ${err.message}`);
+        return null;
     }
 }
 

@@ -1,35 +1,34 @@
+const { logger } = require("../util/logger.js");
 const ticketDAO = require("../repository/ticketDAO.js");
 
 async function addNewTicket(newTicket) {
     try {
         newTicket.id = crypto.randomUUID();
-        newTicket.status = "Pending";
+        newTicket.status = "pending";
 
         await ticketDAO.createTicket(newTicket);
         return newTicket;
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error adding new ticket: ${err.message}`);
+        return null;
     }
 }
 
 async function getTicketById(id) {
-    const ticket = await ticketDAO.getTicket(id);
-
-    if (!ticket) {
-        throw new Error(`Cannot find ticket with ID ${id}.`);
-    } else {
-        return ticket;
+    try {
+        return await ticketDAO.getTicket(id);
+    } catch (err) {
+        logger.error(`Error getting ticket with ID ${id}: ${err.message}`);
+        return null;
     }
 }
 
 async function getTicketsByStatus(ticketStatus) {
-    if (ticketStatus) {
-        const data = await ticketDAO.getTicketsByStatus(ticketStatus);
-        if (data) {
-            return data;
-        } else {
-            return null;
-        }
+    try {
+        return await ticketDAO.getTicketsByStatus(ticketStatus);
+    } catch (err) {
+        logger.error(`Error getting tickets with status ${ticketStatus}: ${err.message}`);
+        return null;
     }
 }
 
@@ -39,10 +38,11 @@ async function updateTicket(id, status) {
             await ticketDAO.updateTicket(id, status);
             return id;
         } catch (err) {
-            throw new Error(err.message);
+            logger.error(`Error updating ticket with ID ${id}: ${err.message}`);
+            return null;
         }
     } else {
-        return null;
+        throw new Error("Status can only be approved or denied.");
     }
 }
 
@@ -51,7 +51,8 @@ async function deleteTicketById(id) {
         await ticketDAO.deleteTicket(id);
         return id;
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error deleting ticket with ID ${id}: ${err.message}`);
+        return null;
     }
 }
 
