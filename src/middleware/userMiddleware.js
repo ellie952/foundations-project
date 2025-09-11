@@ -19,4 +19,13 @@ async function validateNewUser(req, res, next) {
     }
 }
 
-module.exports = { validateNewUser };
+async function validateRole(req, res, next) {
+    try {
+        const user = await decodeJWT(req.headers["Authorization"].split(" ")[1]);
+        user.role === "Manager" ? next() : res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Unauthorized credentials." })
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+module.exports = { validateNewUser, validateRole };

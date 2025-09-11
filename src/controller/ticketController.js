@@ -3,6 +3,7 @@ const { logger } = require("../util/logger.js");
 const ticketService = require("../service/ticketService.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 const { validateNewTicket } = require("../middleware/ticketMiddleware.js");
+const { validateRole } = require("../middleware/userMiddleware.js");
 
 const ticketController = express.Router();
 
@@ -46,6 +47,10 @@ ticketController.get("/:id", async (req, res) => {
         res.json({ message: message });
         logger.error(message);
     }
+});
+
+ticketController.get("/pending", validateRole, async (req, res) => {
+    // TODO
 });
 
 ticketController.put("/update", async (req, res) => {
