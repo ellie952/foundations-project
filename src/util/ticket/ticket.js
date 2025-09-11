@@ -1,4 +1,4 @@
-const HttpStatusCodes = require("../http/statusCodes.js");
+const HTTP_STATUS_CODES = require("../statusCodes.js");
 
 function validateNewTicket(req, res, next) {
     try {
@@ -6,7 +6,7 @@ function validateNewTicket(req, res, next) {
         if (ticket.amount && ticket.description) {
             next();
         } else {
-            res.status(HttpStatusCodes.BAD_REQUEST).json({ message: "Ticket needs an amount and description." });
+            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Ticket needs an amount and description." });
         }
     } catch (err) {
         throw new Error(err.message);

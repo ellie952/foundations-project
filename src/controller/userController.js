@@ -4,7 +4,7 @@ const { logger } = require("../util/logger/logger.js");
 const { validateLogin } = require("../util/user/login.js");
 const { validateNewUser } = require("../util/user/register.js");
 const userService = require("../service/userService.js");
-const HttpStatusCodes = require("../util/http/statusCodes.js");
+const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 
 const secretKey = "secret";
 
@@ -19,13 +19,13 @@ userController.post("/register", validateNewUser, async (req, res) => {
         const newUser = req.body;
         await userService.addNewUser(newUser);
 
-        res.status(HttpStatusCodes.CREATED);
+        res.status(HTTP_STATUS_CODES.CREATED);
         res.json({ message: message });
         logger.info(message);
     } catch (err) {
         message = err.message;
 
-        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
     }
@@ -51,12 +51,12 @@ userController.post("/login", async (req, res) => {
             }
         );
 
-        res.status(HttpStatusCodes.CREATED);
+        res.status(HTTP_STATUS_CODES.CREATED);
         res.json({ message: message, token });
         logger.info(message);
     } catch (err) {
         message = err.message;
-        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
     }
@@ -71,13 +71,13 @@ userController.get("/:id", async (req, res) => {
         const { id } = req.params;
         const user = await userService.getUserById(id);
 
-        res.status(HttpStatusCodes.OK);
+        res.status(HTTP_STATUS_CODES.OK);
         res.json({ message: message, data: user });
         logger.info(message);
     } catch (err) {
         message = err.message;
 
-        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
     }
@@ -92,13 +92,13 @@ userController.put("/update", async (req, res) => {
         const updatedUser = req.body;
         await userService.updateUser(updatedUser);
 
-        res.status(HttpStatusCodes.OK);
+        res.status(HTTP_STATUS_CODES.OK);
         res.json({ message: message });
         logger.info(message);
     } catch (err) {
         message = err.message;
 
-        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
     }
@@ -113,13 +113,13 @@ userController.delete("/:id", async (req, res) => {
         const { id } = req.params;
         await userService.deleteUserById(id);
 
-        res.status(HttpStatusCodes.OK);
+        res.status(HTTP_STATUS_CODES.OK);
         res.json({ message: message });
         logger.info(message);
     } catch (error) {
         message = err.message;
 
-        res.status(HttpStatusCodes.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
         res.json({ message: message });
         logger.error(message);
     }
@@ -130,7 +130,7 @@ userController.delete("/:id", async (req, res) => {
 
 //     try {
 //         message = "Users retrieved."
-//         res.status(HttpStatusCodes.OK);
+//         res.status(HTTP_STATUS_CODES.OK);
 //         res.json({
 //             message: message,
 //             data: fetchAllUsers()
@@ -138,7 +138,7 @@ userController.delete("/:id", async (req, res) => {
 //         logger.info(message);
 //     } catch (err) {
 //         message = err.message;
-//         res.status(HttpStatusCodes.BAD_REQUEST);
+//         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
 //         res.json({ message: message });
 //         logger.error(err.message);
 //     }

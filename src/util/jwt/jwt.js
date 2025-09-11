@@ -1,4 +1,4 @@
-const HttpStatusCodes = require("../http/statusCodes.js");
+const HTTP_STATUS_CODES = require("../statusCodes.js");
 const jwt = require("jsonwebtoken");
 
 const secretKey = "secret";
@@ -8,7 +8,7 @@ async function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
-        res.status(HttpStatusCodes.BAD_REQUEST).json({ message: "Forbidden access." });
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Forbidden access." });
     } else {
         const user = await decodeJWT(token);
         if (user) {
