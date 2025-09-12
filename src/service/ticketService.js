@@ -2,70 +2,49 @@ const { logger } = require("../util/logger.js");
 const ticketDAO = require("../repository/ticketDAO.js");
 
 async function addNewTicket(newTicket) {
-    if (newTicket) {
-        try {
-            newTicket.id = crypto.randomUUID();
-            newTicket.status = "pending";
-
-            await ticketDAO.createTicket(newTicket);
-            return newTicket;
-        } catch (err) {
-            logger.error(`Error adding new ticket: ${err.message}`);
-            return null;
-        }
-    } else {
-        throw new Error("New ticket details not provided to service layer.");
+    if (!newTicket) {
+        logger.error("New ticket details not provided to service layer.");
+        return null;
     }
+
+    newTicket.id = crypto.randomUUID();
+    newTicket.status = "pending";
+
+    await ticketDAO.createTicket(newTicket);
+    return newTicket;
 }
 
 async function getTicketById(id) {
-    if (id) {
-        try {
-            return await ticketDAO.getTicket(id);
-        } catch (err) {
-            logger.error(`Error getting ticket with ID ${id}: ${err.message}`);
-            return null;
-        }
-    } else {
-        throw new Error("Ticket ID to retrieve not provided to service layer.");
+    if (!id) {
+        logger.error("Ticket ID to retrieve not provided to service layer.");
+        return null;
     }
+
+    return await ticketDAO.getTicket(id);
 }
 
 async function getTicketsByStatus(ticketStatus) {
-    if (ticketStatus) {
-        try {
-            return await ticketDAO.getTicketsByStatus(ticketStatus);
-        } catch (err) {
-            logger.error(
-                `Error getting tickets with status ${ticketStatus}: ${err.message}`
-            );
-            return null;
-        }
-    } else {
-        throw new Error(
-            "Ticket status to retrieve not provided to service layer."
-        );
+    if (!ticketStatus) {
+        logger.error("Ticket status to retrieve not provided to service layer.");
+        return null;
     }
+
+    return await ticketDAO.getTicketsByStatus(ticketStatus);
 }
 
 async function getTicketsByUserId(userId) {
-    if (userId) {
-        try {
-            return await ticketDAO.getTicketsByUserId(userId);
-        } catch (err) {
-            logger.error(
-                `Error getting tickets from user with ID ${userId}: ${err.message}`
-            );
-            return null;
-        }
-    } else {
-        throw new Error("User ID to retrieve tickets not provided to service layer.");
+    if (!userId) {
+        logger.error("User ID to retrieve not provided to service layer.");
+        return null;
     }
+
+    return await ticketDAO.getTicketsByUserId(userId);
 }
 
 async function updateTicket(id, status) {
-    if (!id) {
-        throw new Error("Updated ticket ID not provided to service layer.");
+    if (!id || !status) {
+        logger.error("Ticket ID to update and/or updated status not provided to service layer.");
+        return null;
     }
 
     const ticket = await getTicketById(id);
@@ -79,17 +58,12 @@ async function updateTicket(id, status) {
 }
 
 async function deleteTicketById(id) {
-    if (id) {
-        try {
-            await ticketDAO.deleteTicket(id);
-            return id;
-        } catch (err) {
-            logger.error(`Error deleting ticket with ID ${id}: ${err.message}`);
-            return null;
-        }
-    } else {
-        throw new Error("Ticket ID to delete not provided to service layer.");
+    if (!id) {
+        logger.error("Ticket ID to delete not provided to service layer.");
     }
+
+    await ticketDAO.deleteTicket(id);
+    return id;
 }
 
 module.exports = {

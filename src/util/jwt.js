@@ -9,14 +9,14 @@ async function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
-        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: "Unauthorized credentials." });
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Access token required." });
     } else {
         const user = await decodeJWT(token);
         if (user) {
             req.user = user;
             next();
         } else {
-            res.status(400).json({ message: "Bad JWT" });
+            res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: "Unauthorized credentials." });
         }
     }
 }
