@@ -1,4 +1,5 @@
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { logger } = require("../util/logger.js");
 const {
     DynamoDBDocumentClient,
     GetCommand,
@@ -23,6 +24,7 @@ async function createUser(user) {
             await documentClient.send(command);
             return user;
         } catch (err) {
+            logger.error(`Error registering new user: ${err.message}`);
             return null;
         }
     } else {
@@ -40,7 +42,8 @@ async function getUserById(id) {
         try {
             const data = await documentClient.send(command);
             return data.Item;
-        } catch (error) {
+        } catch (err) {
+            logger.error(`Error getting user with ID ${id}: ${err.message}`);
             return null;
         }
     } else {
@@ -61,6 +64,9 @@ async function getUserByUsername(username) {
             const data = await documentClient.send(command);
             return data.Items[0];
         } catch (err) {
+            logger.error(
+                `Error getting user with username ${username}: ${err.message}`
+            );
             return null;
         }
     } else {
@@ -81,6 +87,9 @@ async function updateUser(updatedUser) {
             await documentClient.send(command);
             return updatedUser;
         } catch (err) {
+            logger.error(
+                `Error updating user with ID ${updatedUser.id}: ${err.message}`
+            );
             return null;
         }
     } else {
@@ -101,6 +110,7 @@ async function deleteUser(id) {
             await documentClient.send(command);
             return id;
         } catch (err) {
+            logger.error(`Error deleting user with ID ${id}: ${err.message}`);
             return null;
         }
     } else {
