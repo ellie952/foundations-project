@@ -50,6 +50,26 @@ ticketController.get("/:id", async (req, res) => {
     }
 });
 
+// ticketController.get("/user/:userId", async (req, res) => {
+//     let message = "";
+
+//     try {
+//         message = "Tickets retrieved successfully.";
+
+//         const { userId } = req.params;
+//         const tickets = await ticketService.getTicketsByUserId(userId);
+
+//         res.status(HTTP_STATUS_CODES.OK);
+//         res.json({ message: message, data: tickets });
+//     } catch (err) {
+//         message = err.message;
+
+//         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+//         res.json({ message: message });
+//         logger.error(message);
+//     }
+// });
+
 ticketController.get("/status/:ticketStatus", authenticateToken, validateRole, async (req, res) => {
     let message = "";
 

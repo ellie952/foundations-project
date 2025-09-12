@@ -32,6 +32,15 @@ async function getTicketsByStatus(ticketStatus) {
     }
 }
 
+// async function getTicketsByUserId(userId) {
+//     try {
+//         return await ticketDAO.getTicketsByUserId(userId);
+//     } catch (err) {
+//         logger.error(`Error getting tickets from user with ID ${userId}: ${err.message}`);
+//         return null;
+//     }
+// }
+
 async function updateTicket(id, status) {
     if (status === "approved" || status === "denied") {
         try {
@@ -56,4 +65,4 @@ async function deleteTicketById(id) {
     }
 }
 
-module.exports = { getTicketById, addNewTicket, getTicketsByStatus, updateTicket, deleteTicketById };
+module.exports = { getTicketById, addNewTicket, getTicketsByStatus, getTicketsByUserId, updateTicket, deleteTicketById };

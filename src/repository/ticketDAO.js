@@ -50,6 +50,22 @@ async function getTicketsByStatus(status) {
     }
 }
 
+// async function getTicketsByUserId(userId) {
+//     const command = new ScanCommand({
+//         TableName,
+//         FilterExpression: "#userId = :userId",
+//         ExpressionAttributeNames: { "#userId": "userId" },
+//         ExpressionAttributeValues: { ":userId": userId }
+//     });
+
+//     try {
+//         const data = await documentClient.send(command);
+//         return data.Items;
+//     } catch (err) {
+//         return null;
+//     }
+// }
+
 async function updateTicket(id, status) {
     const ticketToUpdate = await getTicket(id);
     ticketToUpdate.status = status;
@@ -81,4 +97,4 @@ async function deleteTicket(id) {
     }
 }
 
-module.exports = { createTicket, getTicket, getTicketsByStatus, updateTicket, deleteTicket };
+module.exports = { createTicket, getTicket, getTicketsByStatus, getTicketsByUserId, updateTicket, deleteTicket };
