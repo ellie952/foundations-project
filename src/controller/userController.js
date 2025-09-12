@@ -42,13 +42,13 @@ userController.post("/login", async (req, res) => {
         const token = jwt.sign(
             {
                 id: user.id,
-                username,
-                password,
-                role: user.role
+                username: user.username,
+                password: user.password,
+                role: user.role,
             },
             secretKey,
             {
-                expiresIn: "15m"
+                expiresIn: "15m",
             }
         );
 
