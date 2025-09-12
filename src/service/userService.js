@@ -38,7 +38,7 @@ async function getUserById(id) {
             return null;
         }
     } else {
-        throw new Error("ID to retrieve not provided to service layer.");
+        throw new Error("User ID to retrieve not provided to service layer.");
     }
 }
 
@@ -91,14 +91,9 @@ async function deleteUserById(id) {
             return null;
         }
     } else {
-        throw new Error("ID to delete not provided to service layer.");
+        throw new Error("User ID to delete not provided to service layer.");
     }
 }
-
-// function fetchAllUsers() {
-//     if (!users) throw new Error("Cannot locate users.")
-//     return users;
-// }
 
 module.exports = {
     addNewUser,

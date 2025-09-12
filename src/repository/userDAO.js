@@ -47,7 +47,9 @@ async function getUserById(id) {
             return null;
         }
     } else {
-        throw new Error("ID to retrieve not provided to repository layer.");
+        throw new Error(
+            "User ID to retrieve not provided to repository layer."
+        );
     }
 }
 
@@ -114,7 +116,7 @@ async function deleteUser(id) {
             return null;
         }
     } else {
-        throw new Error("ID to delete not provided to repository layer.");
+        throw new Error("User ID to delete not provided to repository layer.");
     }
 }
 
