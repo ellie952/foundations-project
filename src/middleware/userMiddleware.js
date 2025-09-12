@@ -47,7 +47,11 @@ async function validateEmployee(req, res, next) {
         const user = await decodeJWT(
             req.headers["authorization"].split(" ")[1]
         );
-        user.role === "Employee" ? next() : res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: "Unauthorized credentials" });
+        user.role === "Employee"
+            ? next()
+            : res
+                .status(HTTP_STATUS_CODES.UNAUTHORIZED)
+                .json({ message: "Unauthorized credentials." });
     } catch (err) {
         logger.error(`Error validating employee role: ${err.message}`)
     }

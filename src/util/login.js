@@ -12,6 +12,7 @@ async function validateLogin(username, password) {
         }
     } catch (err) {
         logger.error(`Error in validateLogin: ${err.message}`);
+        return null;
     }
 }
 
