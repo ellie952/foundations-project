@@ -25,7 +25,7 @@ userController.post("/register", validateNewUser, async (req, res) => {
     } catch (err) {
         message = err.message;
 
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         res.json({ message: message });
         logger.error(`Error registering new user: ${message}`);
     }
@@ -42,23 +42,23 @@ userController.post("/login", async (req, res) => {
         const token = jwt.sign(
             {
                 id: user.id,
-                username,
-                password,
-                role: user.role
+                username: user.username,
+                password: user.password,
+                role: user.role,
             },
             secretKey,
             {
-                expiresIn: "15m"
+                expiresIn: "15m",
             }
         );
 
-        res.status(HTTP_STATUS_CODES.CREATED);
+        res.status(HTTP_STATUS_CODES.OK);
         res.json({ message: message, token });
         logger.info(message);
     } catch (err) {
         message = err.message;
 
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         res.json({ message: message });
         logger.error(`Error logging in: ${message}`);
     }
@@ -80,7 +80,7 @@ userController.get("/:id", async (req, res) => {
     } catch (err) {
         message = err.message;
 
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         res.json({ message: message });
         logger.error(`Error fetching user with ID ${id}: ${message}`);
     }
@@ -102,7 +102,7 @@ userController.put("/update", async (req, res) => {
     } catch (err) {
         message = err.message;
 
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         res.json({ message: message });
         logger.error(`Error updating user ${updatedUser.username}: ${message}`);
     }
@@ -124,29 +124,10 @@ userController.delete("/:id", async (req, res) => {
     } catch (error) {
         message = err.message;
 
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST);
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         res.json({ message: message });
         logger.error(`Error deleting user with ID ${id}: ${message}`);
     }
 });
-
-// userController.get("/", (req, res) => {
-//     let message = "";
-
-//     try {
-//         message = "Users retrieved."
-//         res.status(HTTP_STATUS_CODES.OK);
-//         res.json({
-//             message: message,
-//             data: fetchAllUsers()
-//         });
-//         logger.info(message);
-//     } catch (err) {
-//         message = err.message;
-//         res.status(HTTP_STATUS_CODES.BAD_REQUEST);
-//         res.json({ message: message });
-//         logger.error(err.message);
-//     }
-// });
 
 module.exports = userController;
