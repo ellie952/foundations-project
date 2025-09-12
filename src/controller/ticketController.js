@@ -7,7 +7,7 @@ const {
     checkStatus,
 } = require("../middleware/ticketMiddleware.js");
 const { validateManager, validateEmployee } = require("../middleware/userMiddleware.js");
-const { authenticateToken, decodeJWT } = require("../util/jwt.js");
+const { authenticateToken } = require("../util/jwt.js");
 
 const ticketController = express.Router();
 
@@ -17,10 +17,8 @@ ticketController.post("/", authenticateToken, validateEmployee, validateNewTicke
     try {
         message = "Ticket created successfully.";
 
-        const user = await decodeJWT(req.headers["authorization"].split(" ")[1]);
-
         const newTicketDetails = req.body;
-        newTicketDetails.userId = user.id;
+        newTicketDetails.userId = req.user.id;
 
         const newTicket = await ticketService.addNewTicket(newTicketDetails);
 
@@ -87,6 +85,36 @@ ticketController.get(
         }
     }
 );
+
+ticketController.get("/user/:userId", authenticateToken, validateEmployee, async (req, res) => {
+    let message = "";
+
+    const { userId } = req.params;
+
+    if (userId == req.user.id) {
+        try {
+            message = "Tickets retrieved successfully.";
+
+            const tickets = await ticketService.getTicketsByUserId(req.user.id);
+            res.status(HTTP_STATUS_CODES.OK);
+            res.json({ message: message, data: tickets });
+        } catch (err) {
+            message = err.message;
+
+            res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+            res.json({ message: message });
+            logger.error(
+                `Error fetching tickets from user: ${message}`
+            );
+        }
+    } else {
+        res.status(HTTP_STATUS_CODES.UNAUTHORIZED);
+        res.json({ message: "Unauthorized credentials." });
+        logger.error(
+            "Error fetching tickets from user with unauthorized credentials."
+        );
+    }
+});
 
 ticketController.put(
     "/update/:id",

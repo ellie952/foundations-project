@@ -24,7 +24,7 @@ async function decodeJWT(token) {
     try {
         const user = await jwt.verify(token, secretKey);
         return user;
-    } catch (error) {
+    } catch (err) {
         return null;
     }
 }

@@ -48,6 +48,21 @@ async function getTicketsByStatus(ticketStatus) {
     }
 }
 
+async function getTicketsByUserId(userId) {
+    if (userId) {
+        try {
+            return await ticketDAO.getTicketsByUserId(userId);
+        } catch (err) {
+            logger.error(
+                `Error getting tickets from user with ID ${userId}: ${err.message}`
+            );
+            return null;
+        }
+    } else {
+        throw new Error("User ID to retrieve tickets not provided to service layer.");
+    }
+}
+
 async function updateTicket(id, status) {
     if (id) {
         if (status === "approved" || status === "denied") {
@@ -86,6 +101,7 @@ module.exports = {
     getTicketById,
     addNewTicket,
     getTicketsByStatus,
+    getTicketsByUserId,
     updateTicket,
     deleteTicketById,
 };

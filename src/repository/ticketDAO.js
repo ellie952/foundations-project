@@ -15,7 +15,7 @@ const TableName = "tickets";
 async function createTicket(ticket) {
     if (ticket) {
         const command = new PutCommand({
-            TableName: "tickets",
+            TableName,
             Item: ticket,
         });
 
@@ -33,7 +33,7 @@ async function createTicket(ticket) {
 async function getTicket(id) {
     if (id) {
         const command = new GetCommand({
-            TableName: "tickets",
+            TableName,
             Key: { id },
         });
 
@@ -72,6 +72,26 @@ async function getTicketsByStatus(status) {
     }
 }
 
+async function getTicketsByUserId(userId) {
+    if (userId) {
+        const command = new ScanCommand({
+            TableName,
+            FilterExpression: "#userId = :userId",
+            ExpressionAttributeNames: { "#userId": "userId" },
+            ExpressionAttributeValues: { ":userId": userId }
+        });
+
+        try {
+            const data = await documentClient.send(command);
+            return data.Items;
+        } catch (err) {
+            return null;
+        }
+    } else {
+        throw new Error("Ticket ID to update and/or updated ticket status not provided to repository layer.");
+    }
+}
+
 async function updateTicket(id, status) {
     if (!id || !status) {
         throw new Error(
@@ -82,7 +102,7 @@ async function updateTicket(id, status) {
         ticketToUpdate.status = status;
 
         const command = new PutCommand({
-            TableName: "tickets",
+            TableName,
             Item: ticketToUpdate,
         });
 
@@ -98,7 +118,7 @@ async function updateTicket(id, status) {
 async function deleteTicket(id) {
     if (id) {
         const command = new DeleteCommand({
-            TableName: "tickets",
+            TableName,
             Key: { id },
         });
 
@@ -119,6 +139,7 @@ module.exports = {
     createTicket,
     getTicket,
     getTicketsByStatus,
+    getTicketsByUserId,
     updateTicket,
     deleteTicket,
 };
