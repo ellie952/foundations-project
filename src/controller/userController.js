@@ -39,22 +39,31 @@ userController.post("/login", async (req, res) => {
         const { username, password } = req.body;
 
         const user = await validateLogin(username, password);
-        const token = jwt.sign(
-            {
-                id: user.id,
-                username: user.username,
-                password: user.password,
-                role: user.role,
-            },
-            secretKey,
-            {
-                expiresIn: "15m",
-            }
-        );
 
-        res.status(HTTP_STATUS_CODES.OK);
-        res.json({ message: message, token });
-        logger.info(message);
+        if (user) {
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    username: user.username,
+                    password: user.password,
+                    role: user.role,
+                },
+                secretKey,
+                {
+                    expiresIn: "15m",
+                }
+            );
+
+            res.status(HTTP_STATUS_CODES.OK);
+            res.json({ message: message, token });
+            logger.info(message);
+        } else {
+            message = "User not found."
+
+            res.status(HTTP_STATUS_CODES.NOT_FOUND);
+            res.json({ message: message });
+            logger.info(message);
+        }
     } catch (err) {
         message = err.message;
 

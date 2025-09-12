@@ -1,3 +1,4 @@
+const { logger } = require("./logger.js");
 const HTTP_STATUS_CODES = require("./statusCodes.js");
 const jwt = require("jsonwebtoken");
 
@@ -8,7 +9,7 @@ async function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: "Forbidden access." });
+        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: "Unauthorized credentials." });
     } else {
         const user = await decodeJWT(token);
         if (user) {
@@ -25,6 +26,7 @@ async function decodeJWT(token) {
         const user = await jwt.verify(token, secretKey);
         return user;
     } catch (err) {
+        logger.error(`Error in decodeJWT: ${err.message}`);
         return null;
     }
 }

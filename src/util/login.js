@@ -1,5 +1,6 @@
 const userService = require("../service/userService.js");
 const bcrypt = require("bcrypt");
+const { logger } = require("./logger.js");
 
 async function validateLogin(username, password) {
     try {
@@ -10,7 +11,7 @@ async function validateLogin(username, password) {
             throw new Error("Invalid login credentials.");
         }
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error in validateLogin: ${err.message}`);
     }
 }
 
