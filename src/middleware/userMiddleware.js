@@ -1,6 +1,7 @@
 const userDAO = require("../repository/userDAO.js");
 const { decodeJWT } = require("../util/jwt.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
+const { logger } = require("../util/logger.js");
 
 async function validateNewUser(req, res, next) {
     try {
@@ -22,11 +23,11 @@ async function validateNewUser(req, res, next) {
             });
         }
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error validating new user: ${err.message}`)
     }
 }
 
-async function validateRole(req, res, next) {
+async function validateManager(req, res, next) {
     try {
         const user = await decodeJWT(
             req.headers["authorization"].split(" ")[1]
@@ -37,8 +38,19 @@ async function validateRole(req, res, next) {
                 .status(HTTP_STATUS_CODES.UNAUTHORIZED)
                 .json({ message: "Unauthorized credentials." });
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error validating manager role: ${err.message}`)
     }
 }
 
-module.exports = { validateNewUser, validateRole };
+async function validateEmployee(req, res, next) {
+    try {
+        const user = await decodeJWT(
+            req.headers["authorization"].split(" ")[1]
+        );
+        user.role === "Employee" ? next() : res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ message: "Unauthorized credentials" });
+    } catch (err) {
+        logger.error(`Error validating employee role: ${err.message}`)
+    }
+}
+
+module.exports = { validateNewUser, validateManager, validateEmployee };

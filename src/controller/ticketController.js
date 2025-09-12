@@ -6,18 +6,22 @@ const {
     validateNewTicket,
     checkStatus,
 } = require("../middleware/ticketMiddleware.js");
-const { validateRole } = require("../middleware/userMiddleware.js");
-const { authenticateToken } = require("../util/jwt.js");
+const { validateManager, validateEmployee } = require("../middleware/userMiddleware.js");
+const { authenticateToken, decodeJWT } = require("../util/jwt.js");
 
 const ticketController = express.Router();
 
-ticketController.post("/", validateNewTicket, async (req, res) => {
+ticketController.post("/", authenticateToken, validateEmployee, validateNewTicket, async (req, res) => {
     let message = "";
 
     try {
         message = "Ticket created successfully.";
 
+        const user = await decodeJWT(req.headers["authorization"].split(" ")[1]);
+
         const newTicketDetails = req.body;
+        newTicketDetails.userId = user.id;
+
         const newTicket = await ticketService.addNewTicket(newTicketDetails);
 
         res.status(HTTP_STATUS_CODES.CREATED);
@@ -57,7 +61,7 @@ ticketController.get("/:id", async (req, res) => {
 ticketController.get(
     "/status/:ticketStatus",
     authenticateToken,
-    validateRole,
+    validateManager,
     async (req, res) => {
         let message = "";
 
@@ -87,7 +91,7 @@ ticketController.get(
 ticketController.put(
     "/update/:id",
     authenticateToken,
-    validateRole,
+    validateManager,
     checkStatus,
     async (req, res) => {
         let message = "";
