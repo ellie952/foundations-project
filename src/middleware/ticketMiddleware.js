@@ -1,3 +1,4 @@
+const { logger } = require("../util/logger.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 
 function validateNewTicket(req, res, next) {
@@ -11,22 +12,22 @@ function validateNewTicket(req, res, next) {
             });
         }
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error in validateNewTicket middleware: ${err.message}.`);
     }
 }
 
 function checkStatus(req, res, next) {
     try {
         const ticket = req.body;
-        if (ticket.status === "pending") {
+        if (ticket.status === "approved" || ticket.status === "denied") {
             next();
         } else {
             res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({
-                message: "Ticket has already been processed.",
+                message: "Ticket status can only be approved or denied.",
             });
         }
     } catch (err) {
-        throw new Error(err.message);
+        logger.error(`Error in checkStatus middleware: ${err.message}`);
     }
 }
 

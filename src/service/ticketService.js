@@ -64,22 +64,17 @@ async function getTicketsByUserId(userId) {
 }
 
 async function updateTicket(id, status) {
-    if (id) {
-        if (status === "approved" || status === "denied") {
-            try {
-                await ticketDAO.updateTicket(id, status);
-                return id;
-            } catch (err) {
-                logger.error(
-                    `Error updating ticket with ID ${id}: ${err.message}`
-                );
-                return null;
-            }
-        } else {
-            throw new Error("Status can only be approved or denied.");
-        }
-    } else {
+    if (!id) {
         throw new Error("Updated ticket ID not provided to service layer.");
+    }
+
+    const ticket = await getTicketById(id);
+
+    if (ticket.status === "pending") {
+        await ticketDAO.updateTicket(id, status);
+        return id;
+    } else {
+        throw new Error("Ticket has already been processed.");
     }
 }
 
