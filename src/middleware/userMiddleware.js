@@ -35,7 +35,7 @@ async function validateManager(req, res, next) {
         user.role === "Manager"
             ? next()
             : res
-                .status(HTTP_STATUS_CODES.UNAUTHORIZED)
+                .status(HTTP_STATUS_CODES.FORBIDDEN)
                 .json({ message: "Unauthorized credentials." });
     } catch (err) {
         logger.error(`Error validating manager role: ${err.message}`)

@@ -54,13 +54,13 @@ userController.post("/login", async (req, res) => {
                 }
             );
 
-            res.status(HTTP_STATUS_CODES.OK);
+            res.status(HTTP_STATUS_CODES.ACCEPTED);
             res.json({ message: message, token });
             logger.info(message);
         } else {
             message = "Unauthorized credentials.";
 
-            res.status(HTTP_STATUS_CODES.NOT_FOUND);
+            res.status(HTTP_STATUS_CODES.BAD_REQUEST);
             res.json({ message: message });
             logger.info(message);
         }

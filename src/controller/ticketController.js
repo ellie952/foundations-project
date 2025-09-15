@@ -133,7 +133,7 @@ ticketController.put(
 
             await ticketService.updateTicket(id, status);
 
-            res.status(HTTP_STATUS_CODES.OK);
+            res.status(HTTP_STATUS_CODES.ACCEPTED);
             res.json({ message: message });
             logger.info(message);
         } catch (err) {
