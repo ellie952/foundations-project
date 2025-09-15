@@ -58,7 +58,7 @@ userController.post("/login", async (req, res) => {
             res.json({ message: message, token });
             logger.info(message);
         } else {
-            message = "User not found."
+            message = "Unauthorized credentials.";
 
             res.status(HTTP_STATUS_CODES.NOT_FOUND);
             res.json({ message: message });
