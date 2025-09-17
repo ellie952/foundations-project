@@ -6,7 +6,9 @@ const { validateNewUser } = require("../middleware/userMiddleware.js");
 const userService = require("../service/userService.js");
 const HTTP_STATUS_CODES = require("../util/statusCodes.js");
 
-const secretKey = "secret";
+require("dotenv").config();
+
+const secretKey = process.env.SECRET_KEY;
 
 const userController = express.Router();
 

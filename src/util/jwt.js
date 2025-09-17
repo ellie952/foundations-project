@@ -2,7 +2,9 @@ const { logger } = require("./logger.js");
 const HTTP_STATUS_CODES = require("./statusCodes.js");
 const jwt = require("jsonwebtoken");
 
-const secretKey = "secret";
+require("dotenv").config();
+
+const secretKey = process.env.SECRET_KEY;
 
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
