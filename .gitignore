@@ -2,7 +2,7 @@
 data/
 
 # Log files
-server.log
+log/
 
 # Node modules
 node_modules/

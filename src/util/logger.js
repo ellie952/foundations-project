@@ -9,7 +9,8 @@ const logger = winston.createLogger({
         prettyPrint()
     ),
     transports: [
-        new winston.transports.File({ filename: "server.log" }),
+        new winston.transports.File({ filename: "log/info.log", level: "info" }),
+        new winston.transports.File({ filename: "log/error.log", level: "error" }),
         new winston.transports.Console()
     ]
 });
