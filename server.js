@@ -3,7 +3,9 @@ const { logger } = require("./src/util/logger.js");
 const userController = require("./src/controller/userController.js");
 const ticketController = require("./src/controller/ticketController.js");
 
-const PORT = 3000;
+require("dotenv").config();
+
+const PORT = process.env.PORT || 3000;
 
 const server = express();
 
